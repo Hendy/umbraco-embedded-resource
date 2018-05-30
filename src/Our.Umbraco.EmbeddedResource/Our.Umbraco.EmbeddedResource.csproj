@@ -111,6 +111,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -173,6 +174,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmbeddedResourceConstants.cs" />
+    <Compile Include="EmbeddedResourceController.cs" />
+    <Compile Include="EmbeddedResourceHelper.cs" />
+    <Compile Include="EmbeddedResourceStartup.cs" />
+    <Compile Include="EmbeddedResourceVirtualFile.cs" />
+    <Compile Include="EmbeddedResourceVirtualFileProvider.cs" />
+    <Compile Include="EmbeddedResourceVirtualFileWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
