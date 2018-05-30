@@ -174,6 +174,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmbeddedResourceAttribute.cs" />
     <Compile Include="EmbeddedResourceConstants.cs" />
     <Compile Include="EmbeddedResourceController.cs" />
     <Compile Include="EmbeddedResourceHelper.cs" />
