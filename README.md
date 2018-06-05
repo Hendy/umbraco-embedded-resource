@@ -9,8 +9,8 @@ The embedded resource pacakge on startup, will look for all assembly attributes 
 
 Example:
 
-[assembly: EmbeddedResource("MyPackage.Example.jpg", "~/AppPlugins/MyPackage/Example.jpg")]
+  [assembly: EmbeddedResource("MyPackage.Example.jpg", "/AppPlugins/MyPackage/Example.jpg")]
+  
+  [assembly: EmbeddedResource("MyPackage.Example.png", "/AppPlugins/MyPackage/Example.png")]
 
-[assembly: EmbeddedResource("MyPackage.Example.png", "~/AppPlugins/MyPackage/Example.png")]
-
-(Any files on the file system will take precenence over an embedded resource)
+(Any files on the file system will take precedence over an embedded resource)
