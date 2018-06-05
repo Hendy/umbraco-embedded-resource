@@ -9,7 +9,7 @@ The embedded resource pacakge on startup, will look for all assembly attributes 
 
 Example:
 
-[assembly: EmbeddedResource("Our.Umbraco.MyPackage.ExampleResource.jpg", "~/AppPlugins/MyPackage/ExampleResource.jpg")]
-[assembly: EmbeddedResource("Our.Umbraco.MyPackage.ExampleResource.png", "~/AppPlugins/MyPackage/ExampleResource.png")]
+[assembly: EmbeddedResource("Our.Umbraco.MyPackage.ExampleResource.jpg", "/AppPlugins/MyPackage/ExampleResource.jpg")]
+[assembly: EmbeddedResource("Our.Umbraco.MyPackage.ExampleResource.png", "/AppPlugins/MyPackage/ExampleResource.png")]
 
 (Any files on the file system will take precenence over an embedded resource)
