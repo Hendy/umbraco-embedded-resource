@@ -1,7 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.EmbeddedResource;
 
-[assembly: EmbeddedResource("EmbeddedResourceTests", "Our.Umbraco.EmbeddedResource.Tests", new string[] { "html", "css", "js" })]
+// register each embedded resource explicity
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.ExampleResource.jpg", "~/AppPlugins/EmbeddedResourceTests/ExampleResource.jpg")]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.ExampleResource.png", "~/AppPlugins/EmbeddedResourceTests/ExampleResource.png")]
+
+// register multiple resources by convention (not required for initial release)
+//[assembly: EmbeddedResources("Our.Umbraco.EmbeddedResource.Tests", "~/App_Plugins/EmbeddedResourceTests/")]
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
@@ -14,16 +19,42 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestInitialize]
         public void TestInitialize()
         {
+            // the startup process will look for all EmbeddedResource assembly attributes and then register resources
             new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup");
         }
 
-        /// <summary>
-        /// Test to check that the startup event will reflect and find the assembly attribute (as registered above this class)
-        /// </summary>
         [TestMethod]
-        public void EnsureStartupReadsAssemblyAttribute()
+        public void ExistsExampleResourceJpg()
         {
-            Assert.Inconclusive();
+            Assert.IsTrue(EmbeddedResourceHelper.ResourceExists("~/AppPlugins/EmbeddedResourceTests/ExampleResource.jpg"));
+        }
+
+        [TestMethod]
+        public void StreamExampleResourceJpg()
+        {
+            var jpg = EmbeddedResourceHelper.GetResource("~/AppPlugins/EmbeddedResourceTests/ExampleResource.jpg");
+
+            Assert.IsNotNull(jpg);
+        }
+
+        [TestMethod]
+        public void ExistsExampleResourcePng()
+        {
+            Assert.IsTrue(EmbeddedResourceHelper.ResourceExists("~/AppPlugins/EmbeddedResourceTests/ExampleResource.png"));
+        }
+
+        [TestMethod]
+        public void StreamExampleResourcePng()
+        {
+            var png = EmbeddedResourceHelper.GetResource("~/AppPlugins/EmbeddedResourceTests/ExampleResource.png");
+
+            Assert.IsNotNull(png);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Shutdown");
         }
     }
 }

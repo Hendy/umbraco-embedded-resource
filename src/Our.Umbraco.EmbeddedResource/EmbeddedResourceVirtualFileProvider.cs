@@ -1,5 +1,4 @@
 ﻿using ClientDependency.Core.CompositeFiles;
-using System;
 
 namespace Our.Umbraco.EmbeddedResource
 {
@@ -15,11 +14,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns></returns>
         public bool FileExists(string virtualFile)
         {
-            if (!virtualFile.EndsWith(EmbeddedResourceConstants.FILE_EXTENSION, StringComparison.InvariantCultureIgnoreCase)) return false;
-
-            string resourceName = EmbeddedResourceHelper.GetResourceNameFromPath(virtualFile);
-
-            return EmbeddedResourceHelper.ResourceExists(resourceName);
+            return EmbeddedResourceHelper.ResourceExists(virtualFile);
         }
 
         /// <summary>
@@ -29,9 +24,12 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns></returns>
         public IVirtualFile GetFile(string virtualFile)
         {
-            if (!FileExists(virtualFile)) return null;
+            if (this.FileExists(virtualFile))
+            {
+                return new EmbeddedResourceVirtualFile(virtualFile);
+            }
 
-            return new EmbeddedResourceVirtualFile(virtualFile);
+            return null;
         }
     }
 }

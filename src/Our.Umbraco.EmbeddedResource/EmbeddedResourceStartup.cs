@@ -1,7 +1,10 @@
 ﻿using ClientDependency.Core;
+using System;
+using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Umbraco.Core;
+using System.Linq;
 
 namespace Our.Umbraco.EmbeddedResource
 {
@@ -36,12 +39,18 @@ namespace Our.Umbraco.EmbeddedResource
         private void Startup()
         {
             // TODO: reflect to find all usages of the EmbeddedResourceAttribute
+            Assembly[] assemblies = AppDomain
+                                    .CurrentDomain
+                                    .GetAssemblies()
+                                    .Where(x => x.GetCustomAttributes<EmbeddedResourceAttribute>().Any())
+                                    .ToArray();
 
+            
 
             RouteTable
                 .Routes
                 .MapRoute(
-                    name: "nuPickersShared",
+                    name: "EmbeddedResource" + Guid.NewGuid().ToString(),
                     url: EmbeddedResourceConstants.ROOT_URL.TrimStart("~/") + "{folder}/{file}",
                     defaults: new
                     {
@@ -51,6 +60,14 @@ namespace Our.Umbraco.EmbeddedResource
                     namespaces: new[] { "nuPickers.EmbeddedResource" });
 
             FileWriters.AddWriterForExtension(EmbeddedResourceConstants.FILE_EXTENSION, new EmbeddedResourceVirtualFileWriter());
+        }
+
+        /// <summary>
+        /// used by the unit testing project
+        /// </summary>
+        private void Shutdown()
+        {
+            RouteTable.Routes.Clear();
         }
     }
 }

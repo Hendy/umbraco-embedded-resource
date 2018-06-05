@@ -12,4 +12,4 @@ Usage:
 
 The emebdded resource pacakge on startup, will look for all assembly attributes (see below) and then then scan those assemblies for embedded resources, and then map  their urls accordingly.
 
-[assembly: EmbeddedResource("EmbeddedResourceTests", "Our.Umbraco.EmbeddedResource.Tests", new string[] { "html", "css", "js" })]
+[assembly: EmbeddedResource("{Folder}", "Our.Umbraco.{Package}", new string[] { "html", "css", "js" })]

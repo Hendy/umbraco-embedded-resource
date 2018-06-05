@@ -3,33 +3,19 @@
 namespace Our.Umbraco.EmbeddedResource
 {
     /// <summary>
-    /// Attribute to use to configure the EmbeddedResource project to handle the serving of embedded resources
+    /// Attribe to use to register a single embedded resource to a url
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class EmbeddedResourceAttribute : Attribute
     {
-        public EmbeddedResourceAttribute(string appPluginsChildFolder, string rootNamespace, string[] fileExtensions)
+        private string resourceNamespace;
+
+        private string resourceUrl;
+
+        public EmbeddedResourceAttribute(string resourceNamespace, string resourceUrl)
         {
-            // = new string[] { "html", "css", "js", "gif", "jpg", "png" }
-
-            this.appPluginsChildFolder = appPluginsChildFolder;
-            this.rootNamespace = rootNamespace;
+            this.resourceNamespace = resourceNamespace;
+            this.resourceUrl = resourceUrl;
         }
-
-        /// <summary>
-        /// The name of the ~/App_Plugins/{AppPluginsChildFolder}/ to handle requests for
-        /// </summary>
-        private string appPluginsChildFolder;
-
-        /// <summary>
-        /// The root namespace in this assembly from which to scan for embedded resource files
-        /// (any resources in descendant namespaces will map with url sub folders)
-        /// </summary>
-        private string rootNamespace;
-
-        /// <summary>
-        /// An array of file extensions to handle 
-        /// </summary>
-        private string[] fileExtensions;
     }
 }
