@@ -15,6 +15,12 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
+        public void ExampleResourceHtmlExists()
+        {
+            Assert.IsTrue(EmbeddedResourceHelper.ResourceExists(Constants.EXAMPLE_RESOURCE_HTML_URL));
+        }
+
+        [TestMethod]
         public void ExampleResourceJpgExists()
         {
             Assert.IsTrue(EmbeddedResourceHelper.ResourceExists(Constants.EXAMPLE_RESOURCE_JPG_URL));

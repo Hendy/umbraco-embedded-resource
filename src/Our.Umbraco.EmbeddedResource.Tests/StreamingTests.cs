@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
@@ -15,11 +16,21 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
+        public void ExampleResourceHtmlStreams()
+        {
+            var html = EmbeddedResourceHelper.GetResource(Constants.EXAMPLE_RESOURCE_HTML_URL);
+
+            Assert.IsNotNull(html);
+            Assert.IsInstanceOfType(html, typeof(Stream));
+        }
+
+        [TestMethod]
         public void ExampleResourceJpgStreams()
         {
             var jpg = EmbeddedResourceHelper.GetResource(Constants.EXAMPLE_RESOURCE_JPG_URL);
 
             Assert.IsNotNull(jpg);
+            Assert.IsInstanceOfType(jpg, typeof(Stream));
         }
 
         [TestMethod]
@@ -28,6 +39,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             var png = EmbeddedResourceHelper.GetResource(Constants.EXAMPLE_RESOURCE_PNG_URL);
 
             Assert.IsNotNull(png);
+            Assert.IsInstanceOfType(png, typeof(Stream));
         }
 
         [TestCleanup]

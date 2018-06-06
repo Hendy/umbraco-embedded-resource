@@ -2,6 +2,9 @@
 {
     internal static class Constants
     {
+        internal const string EXAMPLE_RESOURCE_HTML_NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.ExampleResource.html";
+
+        internal const string EXAMPLE_RESOURCE_HTML_URL = "~/AppPlugins/EmbeddedResourceTests/ExampleResource.html";
 
         internal const string EXAMPLE_RESOURCE_JPG_NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.ExampleResource.jpg";
 
