@@ -1,5 +1,6 @@
+using Our.Umbraco.EmbeddedResource;
+using Our.Umbraco.EmbeddedResource.Tests;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Our.Umbraco.EmbeddedResource.Tests")]
@@ -18,3 +19,7 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// register each embedded resource explicity
+[assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_JPG_NAMESPACE, Constants.EXAMPLE_RESOURCE_JPG_URL)]
+[assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_PNG_NAMESPACE, Constants.EXAMPLE_RESOURCE_PNG_URL)]
