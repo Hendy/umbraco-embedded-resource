@@ -6,51 +6,50 @@ using Umbraco.Core;
 
 namespace Our.Umbraco.EmbeddedResource
 {
-    /// <summary>
-    /// singleton wrapper used to hold onto a 'started' state (so multiple calls to startup only trigger it once)
-    /// </summary>
-    internal sealed class EmbeddedResourceStartup
+    public class EmbeddedResourceStartup : ApplicationEventHandler
     {
-        private static readonly Lazy<EmbeddedResourceStartup> embeddedResourceStartup = new Lazy<EmbeddedResourceStartup>(() => new EmbeddedResourceStartup());
+        //private bool started = false;
 
-        private bool started = false;
-
-        internal static EmbeddedResourceStartup Instance
+        /// <summary>
+        /// Ensure this event fires, even if Umbraco requires a new install or an upgrade
+        /// </summary>
+        protected override bool ExecuteWhenApplicationNotConfigured
         {
             get
             {
-                return embeddedResourceStartup.Value;
+                return true;
             }
         }
 
-        private EmbeddedResourceStartup()
+        /// <summary>
+        /// The Umbraco startup event handler
+        /// </summary>
+        /// <param name="umbracoApplication"></param>
+        /// <param name="applicationContext"></param>
+        protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
+            this.Startup();
         }
-        
-        internal void Startup()
+
+        private void Startup()
         {
-            if (!this.started)
+            foreach (var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
             {
-                this.started = true;
+                // register with mvc
+                RouteTable
+                    .Routes
+                    .MapRoute(
+                        name: "EmbeddedResource" + Guid.NewGuid().ToString(),
+                        url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
+                        defaults: new
+                        {
+                            controller = "EmbeddedResource",
+                            action = "GetEmbeddedResource"
+                        },
+                        namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
 
-                foreach (var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
-                {
-                    // register with mvc
-                    RouteTable
-                        .Routes
-                        .MapRoute(
-                            name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                            url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
-                            defaults: new
-                            {
-                                controller = "EmbeddedResource",
-                                action = "GetEmbeddedResource"
-                            },
-                            namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
-
-                    // register with client depenedency
-                    FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
-                }
+                // register with client depenedency
+                FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
             }
         }
     }
