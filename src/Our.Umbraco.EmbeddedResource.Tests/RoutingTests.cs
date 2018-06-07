@@ -2,6 +2,9 @@
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
+    /// <summary>
+    /// see: Our.Umbraco.EmbeddedResource.Properties.AssemblyInfo.cs for the assembly attributes that define how the test resrouces are configured.
+    /// </summary>
     [TestClass]
     public class RoutingTests
     {

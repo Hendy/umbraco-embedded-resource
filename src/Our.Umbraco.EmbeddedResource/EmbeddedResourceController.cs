@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Umbraco.Core;
+using Umbraco.Core; // todo: remove, as only used for a string extension method
 
 namespace Our.Umbraco.EmbeddedResource
 {

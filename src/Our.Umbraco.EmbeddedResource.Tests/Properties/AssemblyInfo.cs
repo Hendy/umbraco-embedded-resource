@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-// register each embedded resource explicity
+// Register each of the test embedded resource
 [assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_HTML_NAMESPACE, Constants.EXAMPLE_RESOURCE_HTML_URL)]
 [assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_JPG_NAMESPACE, Constants.EXAMPLE_RESOURCE_JPG_URL)]
 [assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_PNG_NAMESPACE, Constants.EXAMPLE_RESOURCE_PNG_URL)]

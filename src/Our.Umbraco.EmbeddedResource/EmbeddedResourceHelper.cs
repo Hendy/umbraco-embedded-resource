@@ -10,7 +10,10 @@ namespace Our.Umbraco.EmbeddedResource
         /// <summary>
         /// Returns true if the supplied url maps to an embedded resource
         /// </summary>
-        /// <param name="url"></param>
+        /// <param name="url">
+        ///     string expected as: a relative path eg. 
+        ///         "~/AppPlugins/EmbeddedResourceTests/ExampleResource.html"
+        /// </param>
         /// <returns></returns>
         internal static bool ResourceExists(string url)
         {

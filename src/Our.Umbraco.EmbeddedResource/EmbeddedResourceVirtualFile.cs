@@ -41,7 +41,10 @@ namespace Our.Umbraco.EmbeddedResource
         /// </summary>
         public string Path
         {
-            get { return this.virtualFile; }
+            get
+            {
+                return this.virtualFile;
+            }
         }
     }
 }

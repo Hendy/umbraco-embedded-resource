@@ -13,7 +13,13 @@ namespace Our.Umbraco.EmbeddedResource
     /// </summary>
     public sealed class EmbeddedResourceVirtualFileWriter : IVirtualFileWriter
     {
-        public bool WriteToStream(BaseCompositeFileProcessingProvider provider, StreamWriter sw, IVirtualFile vf, ClientDependencyType type, string origUrl, HttpContextBase http)
+        public bool WriteToStream(
+                    BaseCompositeFileProcessingProvider provider, 
+                    StreamWriter sw, 
+                    IVirtualFile vf, 
+                    ClientDependencyType type, 
+                    string origUrl, 
+                    HttpContextBase http)
         {
             try
             {
