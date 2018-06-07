@@ -19,16 +19,5 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             Assert.IsTrue(EmbeddedResourceService.GetEmbeddedResourceItems().Length == 3);
         }
-
-        [TestMethod]
-        public void GetAssembliesForEmbeddedResourceItems()
-        {
-            foreach (var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
-            {
-                Assert.IsNotNull(embeddedResourceItem);
-
-                
-            }
-        }
     }
 }

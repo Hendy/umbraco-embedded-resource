@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Web;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
@@ -8,9 +9,6 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     [TestClass]
     public class RoutingTests
     {
-        /// <summary>
-        /// Call the (private) startup method (an Umbraco startup event would normally do this)
-        /// </summary>
         [TestInitialize]
         public void TestInitialize()
         {
@@ -35,10 +33,9 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png"));
         }
 
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Shutdown");
-        }
+        //[TestCleanup]
+        //public void TestCleanup()
+        //{            
+        //}
     }
 }

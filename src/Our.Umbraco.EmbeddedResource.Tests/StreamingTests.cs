@@ -10,7 +10,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     public class StreamingTests
     {
         /// <summary>
-        /// Call the (private) startup method (an Umbraco startup event would normally do this)
+        /// Call the (private) startup method which an Umbraco startup event would normally do
         /// </summary>
         [TestInitialize]
         public void TestInitialize()
@@ -45,10 +45,9 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.IsInstanceOfType(png, typeof(Stream));
         }
 
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Shutdown");
-        }
+        //[TestCleanup]
+        //public void TestCleanup()
+        //{
+        //}
     }
 }

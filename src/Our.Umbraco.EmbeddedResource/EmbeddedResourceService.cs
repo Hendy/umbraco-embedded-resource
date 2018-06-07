@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.EmbeddedResource
 {
@@ -18,20 +19,30 @@ namespace Our.Umbraco.EmbeddedResource
         {
             var embeddedResourceItems = new List<EmbeddedResourceItem>(); // the return value
 
-            // TODO: add caching here to avoid attribute relfection
+            // TODO: add caching here to avoid attribute reflection
 
             // for each of the attributes, get the resrouce & the url it should be served on, and put this table data somewhere
             foreach (var assembly in EmbeddedResourceService.GetAssemblies())
             {
                 foreach (var attribute in assembly.GetCustomAttributes<EmbeddedResourceAttribute>())
-                {
-                    // check to see if resource namespace exists
-                    if (assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
+                {                    
+                    if (!assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
                     {
-                        // ensure url begins with a / (without tide prefix)
+                        LogHelper.Warn(typeof(EmbeddedResourceService), $"Embedded Resource: '{ attribute.ResourceNamespace }', not found in Assembly: '{ assembly.FullName }'");
+                    }
+                    else
+                    {
                         var url = EmbeddedResourceService.EnsureUrlAppRelative(attribute.ResourceUrl);
 
-                        embeddedResourceItems.Add(new EmbeddedResourceItem(assembly.FullName, attribute.ResourceNamespace, url));
+                        if (url == null)
+                        { 
+                            LogHelper.Warn(typeof(EmbeddedResourceService), $"Invalid Relative Url: '{ attribute.ResourceUrl }'");
+                        }
+                        else
+                        {                            
+                            // add to collection, as item known to be valid
+                            embeddedResourceItems.Add(new EmbeddedResourceItem(assembly.FullName, attribute.ResourceNamespace, url));
+                        }
                     }
                 }
             }
@@ -48,8 +59,13 @@ namespace Our.Umbraco.EmbeddedResource
         {
             url = EmbeddedResourceService.EnsureUrlAppRelative(url);
 
-            // check in collection of embedded resource items to see if this url has been registered
-            return EmbeddedResourceService.GetEmbeddedResourceItems().Any(x => x.ResourceUrl == url);
+            if (url != null)
+            {
+                // check in collection of embedded resource items to see if this url has been registered
+                return EmbeddedResourceService.GetEmbeddedResourceItems().Any(x => x.ResourceUrl == url);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -61,21 +77,24 @@ namespace Our.Umbraco.EmbeddedResource
         {
             url = EmbeddedResourceService.EnsureUrlAppRelative(url);
 
-            var embeddedResourceItem = EmbeddedResourceService.GetEmbeddedResourceItems().SingleOrDefault(x => x.ResourceUrl == url);
-
-            if (embeddedResourceItem != null)
+            if (url != null)
             {
-                var assembly = EmbeddedResourceService
-                                .GetAssemblies()
-                                .Single(x => x.FullName == embeddedResourceItem.AssemblyFullName); // expected to exist
+                var embeddedResourceItem = EmbeddedResourceService.GetEmbeddedResourceItems().SingleOrDefault(x => x.ResourceUrl == url);
 
-                var resourceName = assembly
-                                    .GetManifestResourceNames()
-                                    .FirstOrDefault(x => x == embeddedResourceItem.ResourceNamespace);
-
-                if (resourceName != null)
+                if (embeddedResourceItem != null)
                 {
-                    return assembly.GetManifestResourceStream(resourceName);
+                    var assembly = EmbeddedResourceService
+                                    .GetAssemblies()
+                                    .Single(x => x.FullName == embeddedResourceItem.AssemblyFullName); // expected to exist
+
+                    var resourceName = assembly
+                                        .GetManifestResourceNames()
+                                        .FirstOrDefault(x => x == embeddedResourceItem.ResourceNamespace);
+
+                    if (resourceName != null)
+                    {
+                        return assembly.GetManifestResourceStream(resourceName);
+                    }
                 }
             }
 
@@ -97,7 +116,7 @@ namespace Our.Umbraco.EmbeddedResource
         }
 
         /// <summary>
-        /// Helper to ensure that any urls supplied are converted to app relative urls (if possible)
+        /// Helper to ensure that any urls supplied are converted to app relative urls (prefixed wtih "~/"), otherwise returns null
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
@@ -107,20 +126,15 @@ namespace Our.Umbraco.EmbeddedResource
             {
                 if (!VirtualPathUtility.IsAppRelative(url))
                 {
-                    url = VirtualPathUtility.ToAppRelative(url);
+                    return VirtualPathUtility.ToAppRelative(url);
                 }
             }
-            else // no http context when called from a unit test
+            else if (Uri.IsWellFormedUriString(url, UriKind.Relative))
             {
-                url = url.TrimStart("~");
-                
-                if (!url.StartsWith("/")) // all urls are expected to be relative
-                {
-                    url = "/";
-                }
+                return "~" + url.TrimStart('~'); // ensure it's returned with tide prefix
             }
 
-            return url;
+            return null;
         }
     }
 }

@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.png", "/App_Plugins/EmbeddedResourceTests/ExampleResource.png")]
 
 // Attempt to register an invalid resource with a valid url
-//[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.Missing.html", "/App_Plugins/EmbeddedResourceTests/Missing.html")]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.Missing.html", "/App_Plugins/EmbeddedResourceTests/Missing.html")]
 
 // Attempt to register a valid resource with an invalid url
-//[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]

@@ -8,6 +8,8 @@ namespace Our.Umbraco.EmbeddedResource
 {
     public class EmbeddedResourceStartup : ApplicationEventHandler
     {
+        //private bool started = false;
+
         /// <summary>
         /// Ensure this event fires, even if Umbraco requires a new install or an upgrade
         /// </summary>
@@ -43,7 +45,7 @@ namespace Our.Umbraco.EmbeddedResource
                     .Routes
                     .MapRoute(
                         name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                        url: embeddedResourceItem.ResourceUrl.TrimStart("/"), // forward slash always expected
+                        url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
                         defaults: new
                         {
                             controller = "EmbeddedResource",
@@ -52,17 +54,8 @@ namespace Our.Umbraco.EmbeddedResource
                         namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
 
                 // register with client depenedency
-                FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl, new EmbeddedResourceVirtualFileWriter());
+                FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
             }
-        }
-
-        /// <summary>
-        /// used by the unit testing project
-        /// </summary>
-        private void Shutdown()
-        {
-            RouteTable.Routes.Clear();
-            // ClientDependency.Core.FileWriters.PathWriters.Clear(); 
         }
     }
 }
