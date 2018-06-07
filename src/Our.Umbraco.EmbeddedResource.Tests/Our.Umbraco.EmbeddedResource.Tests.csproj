@@ -198,11 +198,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExampleResource.jpg" />
-    <EmbeddedResource Include="ExampleResource.png" />
+    <EmbeddedResource Include="Resources\ExampleResource.jpg" />
+    <EmbeddedResource Include="Resources\ExampleResource.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExampleResource.html" />
+    <EmbeddedResource Include="Resources\ExampleResource.html" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
