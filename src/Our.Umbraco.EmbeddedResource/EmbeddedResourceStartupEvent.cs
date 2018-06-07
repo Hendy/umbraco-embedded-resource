@@ -1,8 +1,4 @@
-﻿using ClientDependency.Core;
-using System;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Umbraco.Core;
+﻿using Umbraco.Core;
 
 namespace Our.Umbraco.EmbeddedResource
 {
@@ -28,34 +24,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// <param name="applicationContext"></param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            base.ApplicationStarted(umbracoApplication, applicationContext);
-
-            this.Startup();
-        }
-
-        /// <summary>
-        /// Main startup method - scan for embedded resources and wire up routing to serve them
-        /// </summary>
-        private void Startup()
-        {
-            foreach(var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
-            {
-                // register with mvc
-                RouteTable
-                    .Routes
-                    .MapRoute(
-                        name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                        url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
-                        defaults: new
-                        {
-                            controller = "EmbeddedResource",
-                            action = "GetEmbeddedResource"
-                        },
-                        namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
-
-                // register with client depenedency
-                FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
-            }
+            EmbeddedResourceStartup.Instance.Startup();
         }
     }
 }

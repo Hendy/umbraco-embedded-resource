@@ -15,7 +15,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            new PrivateObject(new EmbeddedResourceStartupEvent()).Invoke("Startup");
+            EmbeddedResourceStartup.Instance.Startup();
         }
 
         [TestMethod]

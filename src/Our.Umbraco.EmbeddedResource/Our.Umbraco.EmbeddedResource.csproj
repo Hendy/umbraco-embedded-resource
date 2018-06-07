@@ -178,6 +178,7 @@
     <Compile Include="EmbeddedResourceController.cs" />
     <Compile Include="EmbeddedResourceItem.cs" />
     <Compile Include="EmbeddedResourceService.cs" />
+    <Compile Include="EmbeddedResourceStartup.cs" />
     <Compile Include="EmbeddedResourceStartupEvent.cs" />
     <Compile Include="EmbeddedResourceVirtualFile.cs" />
     <Compile Include="EmbeddedResourceVirtualFileProvider.cs" />
