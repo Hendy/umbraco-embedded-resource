@@ -5,7 +5,7 @@ using Umbraco.Core;
 
 namespace Our.Umbraco.EmbeddedResource
 {
-    internal static class EmbeddedResourceHelper
+    internal static class EmbeddedResourceService
     {
         /// <summary>
         /// Returns true if the supplied url maps to an embedded resource

@@ -177,7 +177,7 @@
     <Compile Include="EmbeddedResourceAttribute.cs" />
     <Compile Include="EmbeddedResourceConstants.cs" />
     <Compile Include="EmbeddedResourceController.cs" />
-    <Compile Include="EmbeddedResourceHelper.cs" />
+    <Compile Include="EmbeddedResourceService.cs" />
     <Compile Include="EmbeddedResourceStartup.cs" />
     <Compile Include="EmbeddedResourceVirtualFile.cs" />
     <Compile Include="EmbeddedResourceVirtualFileProvider.cs" />

@@ -33,7 +33,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// </returns>
         public Stream Open()
         {
-            return EmbeddedResourceHelper.GetResource(this.virtualFile);
+            return EmbeddedResourceService.GetResource(this.virtualFile);
         }
 
         /// <summary>

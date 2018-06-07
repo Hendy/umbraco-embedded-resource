@@ -9,7 +9,7 @@ namespace Our.Umbraco.EmbeddedResource
         public ActionResult GetSharedResource(string folder, string file)
         {
             string fileName = file.TrimEnd(EmbeddedResourceConstants.FILE_EXTENSION);
-            var resourceStream = EmbeddedResourceHelper.GetResource(EmbeddedResourceConstants.RESOURCE_PREFIX + folder + "." + fileName);
+            var resourceStream = EmbeddedResourceService.GetResource(EmbeddedResourceConstants.RESOURCE_PREFIX + folder + "." + fileName);
 
             if (resourceStream != null)
             {
