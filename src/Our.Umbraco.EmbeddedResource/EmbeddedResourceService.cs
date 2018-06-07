@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using Umbraco.Core;
 
@@ -8,112 +11,104 @@ namespace Our.Umbraco.EmbeddedResource
     internal static class EmbeddedResourceService
     {
         /// <summary>
+        /// Gets the full dataset of registered emebedded resource POCOs (either from cache, or by reflecting for assembly attributes)
+        /// </summary>
+        /// <returns>POCO array of all registered emebedded resources</returns>
+        internal static EmbeddedResourceItem[] GetEmbeddedResourceItems()
+        {
+            var embeddedResourceItems = new List<EmbeddedResourceItem>(); // the return value
+
+            // TODO: add caching here to avoid attribute relfection
+
+            // for each of the attributes, get the resrouce & the url it should be served on, and put this table data somewhere
+            foreach (var assembly in EmbeddedResourceService.GetAssemblies())
+            {
+                foreach (var attribute in assembly.GetCustomAttributes<EmbeddedResourceAttribute>())
+                {
+                    // check to see if resource namespace exists
+                    if (assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
+                    {
+                        embeddedResourceItems.Add(new EmbeddedResourceItem(assembly.FullName, attribute.ResourceNamespace, attribute.ResourceUrl));
+                    }
+                }
+            }
+
+            return embeddedResourceItems.ToArray();
+        }
+
+        /// <summary>
         /// Returns true if the supplied url maps to an embedded resource
         /// </summary>
-        /// <param name="url">
-        ///     string expected as: a relative path eg. 
-        ///         "~/AppPlugins/EmbeddedResourceTests/ExampleResource.html"
-        /// </param>
+        /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
         /// <returns></returns>
         internal static bool ResourceExists(string url)
         {
-            return false;
-            //return typeof(EmbeddedResourceController)
-            //        .Assembly
-            //        .GetManifestResourceNames()
-            //        .Any(x => x.InvariantEquals(resourceName));
+            url = EmbeddedResourceService.EnsureUrlAppRelative(url);
+
+            // check in collection of embedded resource items to see if this url has been registered
+            return EmbeddedResourceService.GetEmbeddedResourceItems().Any(x => x.ResourceUrl == url);
         }
 
-        internal static Stream GetResource(string url)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
+        /// <returns>a stream or null</returns>
+        internal static Stream GetResourceStream(string url)
         {
-            //var assembly = typeof(EmbeddedResourceController).Assembly;
+            url = EmbeddedResourceService.EnsureUrlAppRelative(url);
 
-            //var manifestResourceName = assembly
-            //                            .GetManifestResourceNames()
-            //                            .FirstOrDefault(x => x.InvariantEquals(resourceName));
+            var embeddedResourceItem = EmbeddedResourceService.GetEmbeddedResourceItems().SingleOrDefault(x => x.ResourceUrl == url);
 
-            //if (manifestResourceName != null)
-            //{
-            //    return assembly.GetManifestResourceStream(manifestResourceName);
-            //}
+            if (embeddedResourceItem != null)
+            {
+                var assembly = EmbeddedResourceService
+                                .GetAssemblies()
+                                .Single(x => x.FullName.InvariantEquals(embeddedResourceItem.AssemblyFullName)); // expected to exist
+
+                var resourceName = assembly
+                                    .GetManifestResourceNames()
+                                    .FirstOrDefault(x => x.InvariantEquals(embeddedResourceItem.ResourceNamespace));
+
+                if (resourceName != null)
+                {
+                    return assembly.GetManifestResourceStream(resourceName);
+                }
+            }
 
             return null;
         }
 
-        //private static string GetResourceNameFromPath(string path)
-        //{
-        //    string resourceName = null;
+        /// <summary>
+        /// single collection of assemblies that contain registered embedded resources
+        /// </summary>
+        /// <returns></returns>
+        private static Assembly[] GetAssemblies()
+        {
+            // TODO: add caching here
+            return AppDomain
+                    .CurrentDomain
+                    .GetAssemblies()
+                    .Where(x => x.GetCustomAttributes<EmbeddedResourceAttribute>().Any())
+                    .ToArray();
+        }
 
-        //    if (HttpContext.Current != null) // for unit testing
-        //        if (!VirtualPathUtility.IsAppRelative(path))
-        //        {
-        //            path = VirtualPathUtility.ToAppRelative(path);
-        //        }
+        /// <summary>
+        /// Helper to ensure that any urls supplied are converted to app relative urls (if possible)
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private static string EnsureUrlAppRelative(string url)
+        {            
+            if (HttpContext.Current != null) // if outside of the unit test context
+            {
+                if (!VirtualPathUtility.IsAppRelative(url))
+                {
+                    url = VirtualPathUtility.ToAppRelative(url);
+                }
+            }
 
-        //    if (path != null && path.StartsWith(EmbeddedResourceConstants.ROOT_URL))
-        //    {
-        //        resourceName = EmbeddedResourceConstants.RESOURCE_PREFIX + path.TrimStart(EmbeddedResourceConstants.ROOT_URL).Replace("/", ".").TrimEnd(EmbeddedResourceConstants.FILE_EXTENSION);
-        //    }
-
-        //    return resourceName;
-        //}
-
-
-        ///// <summary>
-        ///// Determine if a resource exists for the given resource name
-        ///// </summary>
-        ///// <param name="resource">expecting a namespaced string to the resource</param>
-        ///// <returns>true if the resource exists, otherwise false</returns>
-        //internal static bool ResourceExists(string resourceName)
-        //{
-        //    return typeof(EmbeddedResourceController)
-        //            .Assembly
-        //            .GetManifestResourceNames()
-        //            .Any(x => x.InvariantEquals(resourceName));
-        //}
-
-        ///// <summary>
-        ///// Gets the stream for the given resource name
-        ///// </summary>
-        ///// <param name="resource">exepted namespaced resource</param>
-        ///// <returns>null or the resource stream</returns>
-        //internal static Stream GetResource(string resourceName)
-        //{
-        //    var assembly = typeof(EmbeddedResourceController).Assembly;
-
-        //    var manifestResourceName = assembly
-        //                                .GetManifestResourceNames()
-        //                                .FirstOrDefault(x => x.InvariantEquals(resourceName));
-
-        //    if (manifestResourceName != null)
-        //    {
-        //        return assembly.GetManifestResourceStream(manifestResourceName);
-        //    }
-
-        //    return null;
-        //}
-
-        ///// <summary>
-        ///// Convert a url for an embedded resource, to a namespaced string for an embedded resource
-        ///// </summary>
-        ///// <param name="path">string url to embedded resource</param>
-        ///// <returns>null, or a resource namespaced string (the resource may not actually exist)</returns>
-        //internal static string GetResourceNameFromPath(string path)
-        //{
-        //    string resourceName = null;
-
-        //    if (HttpContext.Current != null) // for unit testing
-        //        if (!VirtualPathUtility.IsAppRelative(path))
-        //        {
-        //            path = VirtualPathUtility.ToAppRelative(path);
-        //        }
-
-        //    if (path != null && path.StartsWith(EmbeddedResourceConstants.ROOT_URL))
-        //    {
-        //        resourceName = EmbeddedResourceConstants.RESOURCE_PREFIX + path.TrimStart(EmbeddedResourceConstants.ROOT_URL).Replace("/", ".").TrimEnd(EmbeddedResourceConstants.FILE_EXTENSION);
-        //    }
-
-        //    return resourceName;
-        //}
+            return url;
+        }
     }
 }

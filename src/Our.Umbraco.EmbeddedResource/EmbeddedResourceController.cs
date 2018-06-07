@@ -1,27 +1,29 @@
-﻿using System.Web;
+﻿using System.IO;
+using System.Web;
 using System.Web.Mvc;
-using Umbraco.Core; // todo: remove, as only used for a string extension method
 
 namespace Our.Umbraco.EmbeddedResource
 {
     public class EmbeddedResourceController : Controller
     {
-        public ActionResult GetSharedResource(string folder, string file)
+        public ActionResult GetEmbeddedResource()
         {
-            string fileName = file.TrimEnd(EmbeddedResourceConstants.FILE_EXTENSION);
-            var resourceStream = EmbeddedResourceService.GetResource(EmbeddedResourceConstants.RESOURCE_PREFIX + folder + "." + fileName);
+            var url = this.Request.Url.AbsoluteUri;
+            var fileName = Path.GetFileName(url);
 
+            var resourceStream = EmbeddedResourceService.GetResourceStream(url);
+            
             if (resourceStream != null)
             {
-                return new FileStreamResult(resourceStream, GetMimeType(fileName)); ;
+                return new FileStreamResult(resourceStream, this.GetMimeType(fileName));
             }
 
             return this.HttpNotFound();
         }
 
-        private string GetMimeType(string resource)
+        private string GetMimeType(string fileName)
         {
-            var mimeType = MimeMapping.GetMimeMapping(resource);
+            var mimeType = MimeMapping.GetMimeMapping(fileName);
             return mimeType ?? "text";
         }
     }

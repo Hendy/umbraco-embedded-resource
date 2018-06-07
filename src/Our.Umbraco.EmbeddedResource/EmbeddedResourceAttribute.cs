@@ -3,14 +3,14 @@
 namespace Our.Umbraco.EmbeddedResource
 {
     /// <summary>
-    /// Attribe to use to register a single embedded resource to a url
+    /// Attribe to register an embedded resource
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class EmbeddedResourceAttribute : Attribute
     {
-        private string resourceNamespace;
+        internal string ResourceNamespace { get; private set; }
 
-        private string resourceUrl;
+        internal string ResourceUrl { get; private set; }
 
         /// <summary>
         /// Register an embedded resource in this assembly so it can be served over http(s).
@@ -19,8 +19,8 @@ namespace Our.Umbraco.EmbeddedResource
         /// <param name="resourceUrl">The app relative url on which the resource file should be served - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"</param>
         public EmbeddedResourceAttribute(string resourceNamespace, string resourceUrl)
         {
-            this.resourceNamespace = resourceNamespace;
-            this.resourceUrl = resourceUrl;
+            this.ResourceNamespace = resourceNamespace;
+            this.ResourceUrl = resourceUrl;
         }
     }
 }

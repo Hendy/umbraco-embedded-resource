@@ -183,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="ServiceTests.cs" />
     <Compile Include="StreamingTests.cs" />
     <Compile Include="RoutingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

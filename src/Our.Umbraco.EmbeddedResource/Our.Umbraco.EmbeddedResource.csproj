@@ -175,8 +175,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResourceAttribute.cs" />
-    <Compile Include="EmbeddedResourceConstants.cs" />
     <Compile Include="EmbeddedResourceController.cs" />
+    <Compile Include="EmbeddedResourceItem.cs" />
     <Compile Include="EmbeddedResourceService.cs" />
     <Compile Include="EmbeddedResourceStartup.cs" />
     <Compile Include="EmbeddedResourceVirtualFile.cs" />

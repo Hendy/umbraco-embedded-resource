@@ -1,10 +1,8 @@
 ﻿using ClientDependency.Core;
 using System;
-using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Umbraco.Core;
-using System.Linq;
 
 namespace Our.Umbraco.EmbeddedResource
 {
@@ -38,28 +36,24 @@ namespace Our.Umbraco.EmbeddedResource
         /// </summary>
         private void Startup()
         {
-            // TODO: reflect to find all usages of the EmbeddedResourceAttribute
-            Assembly[] assemblies = AppDomain
-                                    .CurrentDomain
-                                    .GetAssemblies()
-                                    .Where(x => x.GetCustomAttributes<EmbeddedResourceAttribute>().Any())
-                                    .ToArray();
+            foreach(var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
+            {
+                // register with mvc
+                RouteTable
+                    .Routes
+                    .MapRoute(
+                        name: "EmbeddedResource" + Guid.NewGuid().ToString(),
+                        url: embeddedResourceItem.ResourceUrl,
+                        defaults: new
+                        {
+                            controller = "EmbeddedResource",
+                            action = "GetEmbeddedResource"
+                        },
+                        namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
 
-            
-
-            RouteTable
-                .Routes
-                .MapRoute(
-                    name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                    url: EmbeddedResourceConstants.ROOT_URL.TrimStart("~/") + "{folder}/{file}",
-                    defaults: new
-                    {
-                        controller = "EmbeddedResource",
-                        action = "GetSharedResource"
-                    },
-                    namespaces: new[] { "nuPickers.EmbeddedResource" });
-
-            FileWriters.AddWriterForExtension(EmbeddedResourceConstants.FILE_EXTENSION, new EmbeddedResourceVirtualFileWriter());
+                // register with client depenedency
+                FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl, new EmbeddedResourceVirtualFileWriter());
+            }
         }
 
         /// <summary>
@@ -68,6 +62,7 @@ namespace Our.Umbraco.EmbeddedResource
         private void Shutdown()
         {
             RouteTable.Routes.Clear();
+            // ClientDependency.Core.FileWriters.PathWriters.Clear(); 
         }
     }
 }
