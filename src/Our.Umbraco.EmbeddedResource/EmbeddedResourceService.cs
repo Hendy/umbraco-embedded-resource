@@ -94,7 +94,7 @@ namespace Our.Umbraco.EmbeddedResource
         }
 
         /// <summary>
-        /// Helper to ensure that any urls supplied are converted to app relative urls (if possible)
+        /// Helper to ensure that any urls supplied are converted to app relative urls wihtout a leading tide (if possible)
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
@@ -108,7 +108,7 @@ namespace Our.Umbraco.EmbeddedResource
                 }
             }
 
-            return url;
+            return url; //.TrimStart("~");
         }
     }
 }

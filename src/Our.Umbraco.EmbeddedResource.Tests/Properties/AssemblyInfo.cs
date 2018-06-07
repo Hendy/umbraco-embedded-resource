@@ -20,7 +20,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-// Register each of the test embedded resource
-[assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_HTML_NAMESPACE, Constants.EXAMPLE_RESOURCE_HTML_URL)]
-[assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_JPG_NAMESPACE, Constants.EXAMPLE_RESOURCE_JPG_URL)]
-[assembly: EmbeddedResource(Constants.EXAMPLE_RESOURCE_PNG_NAMESPACE, Constants.EXAMPLE_RESOURCE_PNG_URL)]
+// Register each of the test embedded resource files
+// Note: 
+//  The first parameter is always set exactly, as it needs to map to a known resource
+//  The second parameter for the url varies (so variants can be tested)
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.html", "~/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.jpg", "/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg")]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.png", "App_Plugins/EmbeddedResourceTests/ExampleResource.png")]
