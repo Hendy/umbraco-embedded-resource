@@ -6,7 +6,7 @@ using Umbraco.Core;
 
 namespace Our.Umbraco.EmbeddedResource
 {
-    public class EmbeddedResourceStartup : ApplicationEventHandler
+    public class EmbeddedResourceStartupEvent : ApplicationEventHandler
     {
         //private bool started = false;
 

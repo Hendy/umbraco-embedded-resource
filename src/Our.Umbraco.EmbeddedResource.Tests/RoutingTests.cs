@@ -12,7 +12,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup");
+            new PrivateObject(new EmbeddedResourceStartupEvent()).Invoke("Startup");
         }
 
         [TestMethod]
