@@ -28,7 +28,10 @@ namespace Our.Umbraco.EmbeddedResource
                     // check to see if resource namespace exists
                     if (assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
                     {
-                        embeddedResourceItems.Add(new EmbeddedResourceItem(assembly.FullName, attribute.ResourceNamespace, attribute.ResourceUrl));
+                        // ensure url begins with a / (without tide prefix)
+                        var url = EmbeddedResourceService.EnsureUrlAppRelative(attribute.ResourceUrl);
+
+                        embeddedResourceItems.Add(new EmbeddedResourceItem(assembly.FullName, attribute.ResourceNamespace, url));
                     }
                 }
             }
@@ -64,11 +67,11 @@ namespace Our.Umbraco.EmbeddedResource
             {
                 var assembly = EmbeddedResourceService
                                 .GetAssemblies()
-                                .Single(x => x.FullName.InvariantEquals(embeddedResourceItem.AssemblyFullName)); // expected to exist
+                                .Single(x => x.FullName == embeddedResourceItem.AssemblyFullName); // expected to exist
 
                 var resourceName = assembly
                                     .GetManifestResourceNames()
-                                    .FirstOrDefault(x => x.InvariantEquals(embeddedResourceItem.ResourceNamespace));
+                                    .FirstOrDefault(x => x == embeddedResourceItem.ResourceNamespace);
 
                 if (resourceName != null)
                 {
@@ -94,7 +97,7 @@ namespace Our.Umbraco.EmbeddedResource
         }
 
         /// <summary>
-        /// Helper to ensure that any urls supplied are converted to app relative urls wihtout a leading tide (if possible)
+        /// Helper to ensure that any urls supplied are converted to app relative urls (if possible)
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
@@ -107,8 +110,17 @@ namespace Our.Umbraco.EmbeddedResource
                     url = VirtualPathUtility.ToAppRelative(url);
                 }
             }
+            else // no http context when called from a unit test
+            {
+                url = url.TrimStart("~");
+                
+                if (!url.StartsWith("/")) // all urls are expected to be relative
+                {
+                    url = "/";
+                }
+            }
 
-            return url; //.TrimStart("~");
+            return url;
         }
     }
 }

@@ -12,15 +12,12 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     public class ServiceTests
     {
         /// <summary>
-        /// Expecting to find an item for each of the registered resources
+        /// Expecting to find an 3 registered resource items
         /// </summary>
         [TestMethod]
-        public void GetEmeddedResourceItems()
+        public void GetEmeddedResourceItemsCount()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
-
-            Assert.IsNotNull(embeddedResourceItems);
-            Assert.IsTrue(embeddedResourceItems.Length == 3);
+            Assert.IsTrue(EmbeddedResourceService.GetEmbeddedResourceItems().Length == 3);
         }
 
         [TestMethod]

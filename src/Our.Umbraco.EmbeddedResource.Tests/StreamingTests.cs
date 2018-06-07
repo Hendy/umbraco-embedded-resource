@@ -21,7 +21,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExampleResourceHtmlStreams()
         {
-            var html = EmbeddedResourceService.GetResourceStream("~/AppPlugins/EmbeddedResourceTests/ExampleResource.html");
+            var html = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html");
 
             Assert.IsNotNull(html);
             Assert.IsInstanceOfType(html, typeof(Stream));
@@ -30,7 +30,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExampleResourceJpgStreams()
         {
-            var jpg = EmbeddedResourceService.GetResourceStream("~/AppPlugins/EmbeddedResourceTests/ExampleResource.jpg");
+            var jpg = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg");
 
             Assert.IsNotNull(jpg);
             Assert.IsInstanceOfType(jpg, typeof(Stream));
@@ -39,7 +39,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExampleResourcePngStreams()
         {
-            var png = EmbeddedResourceService.GetResourceStream("~/AppPlugins/EmbeddedResourceTests/ExampleResource.png");
+            var png = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png");
 
             Assert.IsNotNull(png);
             Assert.IsInstanceOfType(png, typeof(Stream));

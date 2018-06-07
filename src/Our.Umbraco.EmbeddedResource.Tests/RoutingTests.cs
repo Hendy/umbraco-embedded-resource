@@ -20,19 +20,19 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExampleResourceHtmlExists()
         {
-            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/AppPlugins/EmbeddedResourceTests/ExampleResource.html"));
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html"));
         }
 
         [TestMethod]
         public void ExampleResourceJpgExists()
         {
-            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/AppPlugins/EmbeddedResourceTests/ExampleResource.jpg"));
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg"));
         }
 
         [TestMethod]
         public void ExampleResourcePngExists()
         {
-            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/AppPlugins/EmbeddedResourceTests/ExampleResource.png"));
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png"));
         }
 
         [TestCleanup]

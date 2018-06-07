@@ -43,7 +43,7 @@ namespace Our.Umbraco.EmbeddedResource
                     .Routes
                     .MapRoute(
                         name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                        url: embeddedResourceItem.ResourceUrl.TrimStart("~"),
+                        url: embeddedResourceItem.ResourceUrl.TrimStart("/"), // forward slash always expected
                         defaults: new
                         {
                             controller = "EmbeddedResource",
