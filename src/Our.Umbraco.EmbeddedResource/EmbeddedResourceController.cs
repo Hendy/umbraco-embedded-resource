@@ -4,12 +4,15 @@ using System.Web.Mvc;
 
 namespace Our.Umbraco.EmbeddedResource
 {
+    /// <summary>
+    /// Controller to handle serving the embedded resource
+    /// </summary>
     public class EmbeddedResourceController : Controller
     {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="url">passed in to avoid using the http context</param>
+        /// <param name="url">The (app relative) resource url (passed in to avoid using the http context)</param>
         /// <returns></returns>
         public ActionResult GetEmbeddedResource(string url)
         {

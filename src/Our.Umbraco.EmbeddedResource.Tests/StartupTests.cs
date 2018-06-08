@@ -16,11 +16,11 @@ namespace Our.Umbraco.EmbeddedResource.Tests
 
         [TestMethod]
         [TestCategory("Routing")]
-        public void UnknownRoute()
+        public void Routing_Unknown()
         {
             var httpContextMock = new Mock<HttpContextBase>();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns("~/Unknown");
+            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL);
 
             var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
 
@@ -29,19 +29,50 @@ namespace Our.Umbraco.EmbeddedResource.Tests
 
         [TestMethod]
         [TestCategory("Routing")]
-        public void HtmlRoute()
+        public void Routing_Html()
         {
             var httpContextMock = new Mock<HttpContextBase>();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html");
+            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.HTML_EMBEDDED_RESOURCE_URL);
 
             var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
 
             Assert.IsNotNull(routeData);
             Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
             Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html", routeData.Values["url"]);
+            Assert.AreEqual(Constants.HTML_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
         }
 
+        [TestMethod]
+        [TestCategory("Routing")]
+        public void Routing_Jpg()
+        {
+            var httpContextMock = new Mock<HttpContextBase>();
+
+            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.JPG_EMBEDDED_RESOURCE_URL);
+
+            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
+
+            Assert.IsNotNull(routeData);
+            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
+            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
+            Assert.AreEqual(Constants.JPG_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+        }
+
+        [TestMethod]
+        [TestCategory("Routing")]
+        public void Routing_Png()
+        {
+            var httpContextMock = new Mock<HttpContextBase>();
+
+            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.PNG_EMBEDDED_RESOURCE_URL);
+
+            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
+
+            Assert.IsNotNull(routeData);
+            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
+            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
+            Assert.AreEqual(Constants.PNG_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+        }
     }
 }

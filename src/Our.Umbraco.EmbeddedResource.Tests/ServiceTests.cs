@@ -13,54 +13,77 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         /// Expecting to find an 3 registered resource items
         /// </summary>
         [TestMethod]
-        public void GetEmeddedResourceItemsCount()
+        public void GetEmbeddedResourceItems()
         {
-            Assert.IsTrue(EmbeddedResourceService.GetEmbeddedResourceItems().Length == 3);
+            var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
+
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.IsTrue(embeddedResourceItems.Length == 3, "Expected 3 successfully registered embedded resource files");
         }
 
         [TestMethod]
-        public void HtmlExists()
+        [TestCategory("ResourceExists")]
+        public void ResourceExists_Html()
         {
-            Assert.IsTrue(EmbeddedResourceService.ResourceExists("/App_Plugins/EmbeddedResourceTests/ExampleResource.html"));
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.HTML_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        public void JpgExists()
+        [TestCategory("ResourceExists")]
+        public void ResourceExists_Jpg()
         {
-            Assert.IsTrue(EmbeddedResourceService.ResourceExists("/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg"));
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.JPG_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        public void PngExists()
+        [TestCategory("ResourceExists")]
+        public void ResourceExists_Png()
         {
-            Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png"));
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.PNG_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        public void HtmlStreams()
+        [TestCategory("ResourceExists")]
+        public void ResourceExists_Unknown()
         {
-            var html = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html");
+            Assert.IsFalse(EmbeddedResourceService.ResourceExists(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL));
+        }
+
+        [TestMethod]
+        [TestCategory("GetResourceStream")]
+        public void GetResourceStream_Html()
+        {
+            var html = EmbeddedResourceService.GetResourceStream(Constants.HTML_EMBEDDED_RESOURCE_URL);
 
             Assert.IsNotNull(html);
             Assert.IsInstanceOfType(html, typeof(Stream));
         }
 
         [TestMethod]
-        public void JpgStreams()
+        [TestCategory("GetResourceStream")]
+        public void GetResourceStream_Jpg()
         {
-            var jpg = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg");
+            var jpg = EmbeddedResourceService.GetResourceStream(Constants.JPG_EMBEDDED_RESOURCE_URL);
 
             Assert.IsNotNull(jpg);
             Assert.IsInstanceOfType(jpg, typeof(Stream));
         }
 
         [TestMethod]
-        public void PngStreams()
+        [TestCategory("GetResourceStream")]
+        public void GetResourceStream_Png()
         {
-            var png = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png");
+            var png = EmbeddedResourceService.GetResourceStream(Constants.PNG_EMBEDDED_RESOURCE_URL);
 
             Assert.IsNotNull(png);
             Assert.IsInstanceOfType(png, typeof(Stream));
+        }
+
+        [TestMethod]
+        [TestCategory("GetResourceStream")]
+        public void GetResourceStream_Unknown()
+        {
+            Assert.IsNull(EmbeddedResourceService.GetResourceStream(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL));
         }
     }
 }
