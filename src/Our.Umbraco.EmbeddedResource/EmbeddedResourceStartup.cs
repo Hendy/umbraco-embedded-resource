@@ -44,7 +44,8 @@ namespace Our.Umbraco.EmbeddedResource
                         defaults: new
                         {
                             controller = "EmbeddedResource",
-                            action = "GetEmbeddedResource"
+                            action = "GetEmbeddedResource",
+                            url = embeddedResourceItem.ResourceUrl
                         },
                         namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
 

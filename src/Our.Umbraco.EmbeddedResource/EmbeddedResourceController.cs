@@ -1,14 +1,18 @@
-﻿using System.Web;
+﻿using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Our.Umbraco.EmbeddedResource
 {
     public class EmbeddedResourceController : Controller
     {
-        public ActionResult GetEmbeddedResource()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url">passed in to avoid using the http context</param>
+        /// <returns></returns>
+        public ActionResult GetEmbeddedResource(string url)
         {
-            var url = this.Request.Url.AbsoluteUri;
-
             var resourceStream = EmbeddedResourceService.GetResourceStream(url);
             
             if (resourceStream != null)
@@ -26,7 +30,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns></returns>
         private string GetMimeType(string url)
         {
-            var fileName = VirtualPathUtility.GetFileName(url);
+            var fileName = Path.GetFileName(url);
 
             var mimeType = MimeMapping.GetMimeMapping(fileName);
 

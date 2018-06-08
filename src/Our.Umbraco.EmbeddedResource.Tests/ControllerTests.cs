@@ -1,23 +1,36 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
     [TestClass]
     public class ControllerTests
     {
-        //[TestMethod]
-        //public void GetEmeddedResource()
-        //{
-        //    HttpContext.Current = new HttpContext(
-        //                                new HttpRequest(null, "http://tempuri.org/App_Plugins/EmbeddedResourceTests/ExampleResource.html", null), 
-        //                                new HttpResponse(null));
+        /// <summary>
+        /// valid url request, but no associated embedded resource
+        /// </summary>
+        [TestMethod]
+        public void UnknownResource()
+        {
+            var controller = new EmbeddedResourceController();
 
-        //    var controller = new EmbeddedResourceController();
+            var embeddedResource = controller.GetEmbeddedResource("~/App_Plugins/EmbeddedResourceTests/Unknown");
 
-        //    var embeddedResource = controller.GetEmbeddedResource();
+            Assert.IsNotNull(embeddedResource);
+            Assert.IsInstanceOfType(embeddedResource, typeof(HttpNotFoundResult));
+        }
 
-        //    Assert.IsNotNull(embeddedResource);
-        //}
+        [TestMethod]
+        public void HtmlResource()
+        {
+            var controller = new EmbeddedResourceController();
+
+            var embeddedResource = controller.GetEmbeddedResource("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html");
+
+            Assert.IsNotNull(embeddedResource);
+            Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
+            Assert.AreEqual("text/html", ((FileStreamResult)embeddedResource).ContentType);
+        }
     }
 }

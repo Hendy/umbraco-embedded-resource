@@ -19,25 +19,25 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        public void ExampleResourceHtmlExists()
+        public void HtmlExists()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists("/App_Plugins/EmbeddedResourceTests/ExampleResource.html"));
         }
 
         [TestMethod]
-        public void ExampleResourceJpgExists()
+        public void JpgExists()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists("/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg"));
         }
 
         [TestMethod]
-        public void ExampleResourcePngExists()
+        public void PngExists()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png"));
         }
 
         [TestMethod]
-        public void ExampleResourceHtmlStreams()
+        public void HtmlStreams()
         {
             var html = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.html");
 
@@ -46,7 +46,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        public void ExampleResourceJpgStreams()
+        public void JpgStreams()
         {
             var jpg = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.jpg");
 
@@ -55,7 +55,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        public void ExampleResourcePngStreams()
+        public void PngStreams()
         {
             var png = EmbeddedResourceService.GetResourceStream("~/App_Plugins/EmbeddedResourceTests/ExampleResource.png");
 
