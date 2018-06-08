@@ -13,6 +13,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         /// Expecting to find an 3 registered resource items
         /// </summary>
         [TestMethod]
+        [TestCategory("Service_GetEmbeddedResourceItems")]
         public void GetEmbeddedResourceItems()
         {
             var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
@@ -22,35 +23,35 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        [TestCategory("ResourceExists")]
+        [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Html()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.HTML_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        [TestCategory("ResourceExists")]
+        [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Jpg()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.JPG_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        [TestCategory("ResourceExists")]
+        [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Png()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.PNG_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        [TestCategory("ResourceExists")]
+        [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Unknown()
         {
             Assert.IsFalse(EmbeddedResourceService.ResourceExists(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
-        [TestCategory("GetResourceStream")]
+        [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Html()
         {
             var html = EmbeddedResourceService.GetResourceStream(Constants.HTML_EMBEDDED_RESOURCE_URL);
@@ -60,7 +61,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        [TestCategory("GetResourceStream")]
+        [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Jpg()
         {
             var jpg = EmbeddedResourceService.GetResourceStream(Constants.JPG_EMBEDDED_RESOURCE_URL);
@@ -70,7 +71,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        [TestCategory("GetResourceStream")]
+        [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Png()
         {
             var png = EmbeddedResourceService.GetResourceStream(Constants.PNG_EMBEDDED_RESOURCE_URL);
@@ -80,7 +81,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        [TestCategory("GetResourceStream")]
+        [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Unknown()
         {
             Assert.IsNull(EmbeddedResourceService.GetResourceStream(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL));

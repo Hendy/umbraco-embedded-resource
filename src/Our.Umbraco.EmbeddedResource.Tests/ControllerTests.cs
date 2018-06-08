@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
@@ -8,6 +7,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     public class ControllerTests
     {
         [TestMethod]
+        [TestCategory("Controller_GetEmbeddedResource")]
         public void GetEmbeddedResource_Html()
         {
             var controller = new EmbeddedResourceController();
@@ -20,6 +20,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
+        [TestCategory("Controller_GetEmbeddedResource")]
         public void GetEmbeddedResource_Jpg()
         {
             var controller = new EmbeddedResourceController();
@@ -32,6 +33,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
+        [TestCategory("Controller_GetEmbeddedResource")]
         public void GetEmbeddedResource_Png()
         {
             var controller = new EmbeddedResourceController();
@@ -47,6 +49,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         /// valid url request, but no associated embedded resource
         /// </summary>
         [TestMethod]
+        [TestCategory("Controller_GetEmbeddedResource")]
         public void GetEmbeddedResource_Unknown()
         {
             var controller = new EmbeddedResourceController();
