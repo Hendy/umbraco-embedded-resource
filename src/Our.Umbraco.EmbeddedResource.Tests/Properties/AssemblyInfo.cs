@@ -26,8 +26,12 @@ using System.Runtime.InteropServices;
 //[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", Constants.PNG_RESOURCE_URL)] // commented out so can test without tide prefix
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", "/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png")] // to test it registers without the tide prefix
 
+// Attempt to register duplicates
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_EMBEDDED_RESOURCE_URL)]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_EMBEDDED_RESOURCE_URL)]
+
 // Attempt to register an invalid resource with a valid url
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.Missing.html", "/App_Plugins/EmbeddedResourceTests/Missing.html")]
 
 // Attempt to register a valid resource with an invalid url
-[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.ExampleResource.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]

@@ -14,7 +14,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         /// </summary>
         [TestMethod]
         [TestCategory("Service_GetEmbeddedResourceItems")]
-        public void GetEmbeddedResourceItems()
+        public void GetEmbeddedResourceItems_ExpectedCountOfThree()
         {
             var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
 
