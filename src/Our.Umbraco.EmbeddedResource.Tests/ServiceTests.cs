@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Linq;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
@@ -9,17 +10,24 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     [TestClass]
     public class ServiceTests
     {
-        /// <summary>
-        /// Expecting to find an 3 registered resource items
-        /// </summary>
         [TestMethod]
         [TestCategory("Service_GetEmbeddedResourceItems")]
-        public void GetEmbeddedResourceItems_ExpectedCountOfThree()
+        public void GetEmbeddedResourceItems_ExpectedCount_NotBackOfficeUserOnly()
         {
             var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
-            Assert.IsTrue(embeddedResourceItems.Length == 3, "Expected 3 successfully registered embedded resource files");
+            Assert.IsTrue(embeddedResourceItems.Where(x => !x.BackOfficeUserOnly).Count() == 4);
+        }
+
+        [TestMethod]
+        [TestCategory("Service_GetEmbeddedResourceItems")]
+        public void GetEmbeddedResourceItems_ExpectedCount_BackOfficeUserOnly()
+        {
+            var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
+
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.IsTrue(embeddedResourceItems.Where(x => x.BackOfficeUserOnly).Count() == 1);
         }
 
         [TestMethod]
@@ -41,6 +49,20 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         public void ResourceExists_Png()
         {
             Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.PNG_EMBEDDED_RESOURCE_URL));
+        }
+
+        [TestMethod]
+        [TestCategory("Service_ResourceExists")]
+        public void ResourceExists_Txt()
+        {
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.TXT_EMBEDDED_RESOURCE_URL));
+        }
+
+        [TestMethod]
+        [TestCategory("Service_ResourceExists")]
+        public void ResourceExists_Txt_BackOfficeUserOnly()
+        {
+            Assert.IsTrue(EmbeddedResourceService.ResourceExists(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL));
         }
 
         [TestMethod]
@@ -78,6 +100,26 @@ namespace Our.Umbraco.EmbeddedResource.Tests
 
             Assert.IsNotNull(png);
             Assert.IsInstanceOfType(png, typeof(Stream));
+        }
+
+        [TestMethod]
+        [TestCategory("Service_GetResourceStream")]
+        public void GetResourceStream_Txt()
+        {
+            var txt = EmbeddedResourceService.GetResourceStream(Constants.TXT_EMBEDDED_RESOURCE_URL);
+
+            Assert.IsNotNull(txt);
+            Assert.IsInstanceOfType(txt, typeof(Stream));
+        }
+
+        [TestMethod]
+        [TestCategory("Service_GetResourceStream")]
+        public void GetResourceStream_Txt_BackOfficeUserOnly()
+        {
+            var txt = EmbeddedResourceService.GetResourceStream(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL);
+
+            Assert.IsNotNull(txt);
+            Assert.IsInstanceOfType(txt, typeof(Stream));
         }
 
         [TestMethod]

@@ -11,16 +11,19 @@
 
         internal string ResourceUrl { get; private set; }
 
+        internal bool BackOfficeUserOnly { get; private set; }
+
         /// <summary>
         /// constructor to set property values - ensures all mandatory values are supplied
         /// </summary>
         /// <param name="resourceNamespace"></param>
         /// <param name="resourceUrl"></param>
-        internal EmbeddedResourceItem(string assemblyFullName, string resourceNamespace, string resourceUrl)
+        internal EmbeddedResourceItem(string assemblyFullName, string resourceNamespace, string resourceUrl, bool backOfficeUserOnly)
         {
             this.AssemblyFullName = assemblyFullName;
             this.ResourceNamespace = resourceNamespace;
             this.ResourceUrl = resourceUrl;
+            this.BackOfficeUserOnly = backOfficeUserOnly;
         }
     }
 }

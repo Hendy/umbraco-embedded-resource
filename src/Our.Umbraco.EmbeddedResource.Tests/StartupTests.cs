@@ -64,6 +64,38 @@ namespace Our.Umbraco.EmbeddedResource.Tests
 
         [TestMethod]
         [TestCategory("Startup_Routing")]
+        public void Routing_Txt()
+        {
+            var httpContextMock = new Mock<HttpContextBase>();
+
+            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.TXT_EMBEDDED_RESOURCE_URL);
+
+            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
+
+            Assert.IsNotNull(routeData);
+            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
+            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
+            Assert.AreEqual(Constants.TXT_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+        }
+
+        [TestMethod]
+        [TestCategory("Startup_Routing")]
+        public void Routing_Txt_BackOfficeUserOnly()
+        {
+            var httpContextMock = new Mock<HttpContextBase>();
+
+            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL);
+
+            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
+
+            Assert.IsNotNull(routeData);
+            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
+            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
+            Assert.AreEqual(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+        }
+
+        [TestMethod]
+        [TestCategory("Startup_Routing")]
         public void Routing_Unknown()
         {
             var httpContextMock = new Mock<HttpContextBase>();

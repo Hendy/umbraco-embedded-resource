@@ -41,7 +41,12 @@ namespace Our.Umbraco.EmbeddedResource
                         else
                         {                            
                             // add to collection, as item known to be valid
-                            embeddedResourceItems.Add(new EmbeddedResourceItem(assembly.FullName, attribute.ResourceNamespace, url));
+                            embeddedResourceItems.Add(
+                                new EmbeddedResourceItem(
+                                    assembly.FullName, 
+                                    attribute.ResourceNamespace, 
+                                    url,
+                                    attribute.BackOfficeUserOnly));
                         }
                     }
                 }
@@ -51,21 +56,30 @@ namespace Our.Umbraco.EmbeddedResource
         }
 
         /// <summary>
+        /// Attempt to get a specific configuration from the request url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        internal static EmbeddedResourceItem GetEmbeddedResourceItem(string url)
+        {
+            url = EmbeddedResourceService.EnsureUrlAppRelative(url);
+
+            if (url != null)
+            {
+                return EmbeddedResourceService.GetEmbeddedResourceItems().SingleOrDefault(x => x.ResourceUrl == url);
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Returns true if the supplied url maps to an embedded resource
         /// </summary>
         /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
         /// <returns></returns>
         internal static bool ResourceExists(string url)
         {
-            url = EmbeddedResourceService.EnsureUrlAppRelative(url);
-
-            if (url != null)
-            {
-                // check in collection of embedded resource items to see if this url has been registered
-                return EmbeddedResourceService.GetEmbeddedResourceItems().Any(x => x.ResourceUrl == url);
-            }
-
-            return false;
+            return EmbeddedResourceService.GetEmbeddedResourceItem(url) != null;
         }
 
         /// <summary>
@@ -75,26 +89,29 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns>a stream or null</returns>
         internal static Stream GetResourceStream(string url)
         {
-            url = EmbeddedResourceService.EnsureUrlAppRelative(url);
+            return EmbeddedResourceService.GetResourceStream(EmbeddedResourceService.GetEmbeddedResourceItem(url));
+        }
 
-            if (url != null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="embeddedResourceItem"></param>
+        /// <returns></returns>
+        internal static Stream GetResourceStream(EmbeddedResourceItem embeddedResourceItem)
+        {
+            if (embeddedResourceItem != null)
             {
-                var embeddedResourceItem = EmbeddedResourceService.GetEmbeddedResourceItems().SingleOrDefault(x => x.ResourceUrl == url);
+                var assembly = EmbeddedResourceService
+                                .GetAssemblies()
+                                .Single(x => x.FullName == embeddedResourceItem.AssemblyFullName); // expected to exist
 
-                if (embeddedResourceItem != null)
+                var resourceName = assembly
+                                    .GetManifestResourceNames()
+                                    .FirstOrDefault(x => x == embeddedResourceItem.ResourceNamespace);
+
+                if (resourceName != null)
                 {
-                    var assembly = EmbeddedResourceService
-                                    .GetAssemblies()
-                                    .Single(x => x.FullName == embeddedResourceItem.AssemblyFullName); // expected to exist
-
-                    var resourceName = assembly
-                                        .GetManifestResourceNames()
-                                        .FirstOrDefault(x => x == embeddedResourceItem.ResourceNamespace);
-
-                    if (resourceName != null)
-                    {
-                        return assembly.GetManifestResourceStream(resourceName);
-                    }
+                    return assembly.GetManifestResourceStream(resourceName);
                 }
             }
 

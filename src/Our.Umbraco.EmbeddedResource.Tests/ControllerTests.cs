@@ -1,5 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System.Web;
 using System.Web.Mvc;
+using Umbraco.Web;
+using UmbracoWebSecurity = Umbraco.Web.Security.WebSecurity;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
@@ -44,6 +48,45 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
             Assert.AreEqual("image/png", ((FileStreamResult)embeddedResource).ContentType);
         }
+
+        [TestMethod]
+        [TestCategory("Controller_GetEmbeddedResource")]
+        public void GetEmbeddedResource_Txt()
+        {
+            var controller = new EmbeddedResourceController();
+
+            var embeddedResource = controller.GetEmbeddedResource(Constants.TXT_EMBEDDED_RESOURCE_URL);
+
+            Assert.IsNotNull(embeddedResource);
+            Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
+            Assert.AreEqual("text/plain", ((FileStreamResult)embeddedResource).ContentType);
+        }
+
+        //[TestMethod]
+        //[TestCategory("Controller_GetEmbeddedResource")]
+        //public void GetEmbeddedResource_Txt_BackOfficeUserOnly_NotLoggedIn()
+        //{
+
+        //    var controller = new EmbeddedResourceController();
+
+        //    var embeddedResource = controller.GetEmbeddedResource(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL);
+
+        //    Assert.IsNotNull(embeddedResource);
+        //    Assert.IsInstanceOfType(embeddedResource, typeof(HttpNotFoundResult));
+        //}
+
+        //[TestMethod]
+        //[TestCategory("Controller_GetEmbeddedResource")]
+        //public void GetEmbeddedResource_Txt_BackOfficeUserOnly_LoggedIn()
+        //{
+        //    var controller = new EmbeddedResourceController();
+
+        //    var embeddedResource = controller.GetEmbeddedResource(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL);
+
+        //    Assert.IsNotNull(embeddedResource);
+        //    Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
+        //    Assert.AreEqual("text/plain", ((FileStreamResult)embeddedResource).ContentType);
+        //}
 
         /// <summary>
         /// valid url request, but no associated embedded resource

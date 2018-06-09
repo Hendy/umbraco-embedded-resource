@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using Umbraco.Core.Security;
+using Umbraco.Web;
 
 namespace Our.Umbraco.EmbeddedResource
 {
@@ -16,14 +18,27 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns></returns>
         public ActionResult GetEmbeddedResource(string url)
         {
-            var resourceStream = EmbeddedResourceService.GetResourceStream(url);
-            
-            if (resourceStream != null)
+            var embeddedResourceItem = EmbeddedResourceService.GetEmbeddedResourceItem(url);
+
+            if (embeddedResourceItem != null)
             {
-                return new FileStreamResult(resourceStream, this.GetMimeType(url));
+                if (!embeddedResourceItem.BackOfficeUserOnly || this.IsBackOfficeUser())
+                {
+                    var resourceStream = EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
+
+                    if (resourceStream != null)
+                    {
+                        return new FileStreamResult(resourceStream, this.GetMimeType(url));
+                    }
+                }
             }
 
             return this.HttpNotFound();
+        }
+
+        private bool IsBackOfficeUser()
+        {
+            return UmbracoContext.Current.Security.CurrentUser != null;
         }
 
         /// <summary>
