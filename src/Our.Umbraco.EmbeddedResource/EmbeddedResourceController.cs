@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using Umbraco.Core.Security;
 using Umbraco.Web;
 
 namespace Our.Umbraco.EmbeddedResource
