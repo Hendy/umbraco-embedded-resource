@@ -28,6 +28,8 @@ namespace Our.Umbraco.EmbeddedResource
         /// <param name="applicationContext"></param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
+            base.ApplicationStarted(umbracoApplication, applicationContext);
+
             this.Startup();
         }
 

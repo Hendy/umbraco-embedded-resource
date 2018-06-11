@@ -145,6 +145,8 @@ namespace Our.Umbraco.EmbeddedResource
                 {
                     return VirtualPathUtility.ToAppRelative(url);
                 }
+
+                return url;
             }
             else if (Uri.IsWellFormedUriString(url, UriKind.Relative))
             {
