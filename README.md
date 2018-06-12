@@ -1,4 +1,4 @@
-# umbraco-embedded-resource
+# Umbraco Embedded Resource
 For use by package developers to serve embedded assets.
 
 Using embedded resources within an assembly for an Umbraco package has a number of advantages over placing them on the file system.
