@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using Umbraco.Core;
+using Umbraco.Core.Security;
 using Umbraco.Web;
 
 namespace Our.Umbraco.EmbeddedResource
@@ -35,9 +37,21 @@ namespace Our.Umbraco.EmbeddedResource
             return this.HttpNotFound();
         }
 
+        /// <summary>
+        /// returns true if the current request is logged in as a back office user
+        /// </summary>
+        /// <returns></returns>
         private bool IsBackOfficeUser()
         {
-            return UmbracoContext.Current.Security.CurrentUser != null;
+            if (this.HttpContext != null)
+            {
+                var context = this.HttpContext;
+                var ticket = this.HttpContext.GetUmbracoAuthTicket();
+
+                return context.AuthenticateCurrentRequest(ticket, true);
+            }
+
+            return false;
         }
 
         /// <summary>
