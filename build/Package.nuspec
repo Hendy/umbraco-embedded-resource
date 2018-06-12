@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Our.Umbraco.EmbededResource</id>
+    <id>Our.Umbraco.EmbeddedResource</id>
     <version>0.1.0</version>
     <authors>Hendy Racher</authors>
     <owners>Hendy Racher</owners>
