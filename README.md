@@ -10,13 +10,15 @@ Using embedded resources within an assembly for an Umbraco package has a number 
 3) Resources can be protected such that they are only served to back office authenticated users (so no public leakage as to what packages are installed)
 
 
-## Usage:
-Once the NuGet package has been installed, the embedded resources in your project need to be registered and this is done via assembly attributes (typically placed in /Properties/AssemblyInfo.cs).
+## Usage
+With the NuGet package has been installed, the embedded resources in your project need to be registered; this is done via assembly attributes (typically placed in /Properties/AssemblyInfo.cs).
 
 The assembly attribute (Our.Umbraco.EmbeddedResource.EmbeddedResourceAttribute) has three parameters:
 * The full namespace path to the embedded resource
 * The app relative url that the resource should be served on
 * A flag to specify whether the resource should be protected (ie served to back office users only)
+
+## Example
 
     @using Our.Umbraco.EmbeddedResource
 
