@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt", Constants.TXT_EMBEDDED_RESOURCE_URL)]
 
 // Register a known resource on another url, and set to protected
-[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt", Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL, true)]
+[assembly: EmbeddedResourceProtected("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt", Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL)]
 
 // Attempt to register duplicates - ignored as attribute definitions are identical
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_EMBEDDED_RESOURCE_URL)]

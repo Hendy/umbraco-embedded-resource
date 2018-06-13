@@ -24,7 +24,10 @@ namespace Our.Umbraco.EmbeddedResource
             // for each of the attributes, get the resrouce & the url it should be served on, and put this table data somewhere
             foreach (var assembly in EmbeddedResourceService.GetAssemblies())
             {
-                foreach (var attribute in assembly.GetCustomAttributes<EmbeddedResourceAttribute>())
+                var attributes = ((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceAttribute>())
+                                .Union((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceProtectedAttribute>());
+
+                foreach (var attribute in attributes)
                 {                    
                     if (!assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
                     {
@@ -39,14 +42,16 @@ namespace Our.Umbraco.EmbeddedResource
                             LogHelper.Warn(typeof(EmbeddedResourceService), $"Invalid Relative Url: '{ attribute.ResourceUrl }'");
                         }
                         else
-                        {                            
+                        {
+                            var backOfficeUserOnly = attribute is EmbeddedResourceProtectedAttribute;
+
                             // add to collection, as item known to be valid
                             embeddedResourceItems.Add(
                                 new EmbeddedResourceItem(
                                     assembly.FullName, 
                                     attribute.ResourceNamespace, 
                                     url,
-                                    attribute.BackOfficeUserOnly));
+                                    backOfficeUserOnly));
                         }
                     }
                 }
@@ -128,7 +133,9 @@ namespace Our.Umbraco.EmbeddedResource
             return AppDomain
                     .CurrentDomain
                     .GetAssemblies()
-                    .Where(x => x.GetCustomAttributes<EmbeddedResourceAttribute>().Any())
+                    .Where(x => 
+                        x.GetCustomAttributes<EmbeddedResourceAttribute>().Any() || 
+                        x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>().Any())
                     .ToArray();
         }
 

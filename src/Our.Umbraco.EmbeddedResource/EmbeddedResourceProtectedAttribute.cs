@@ -6,11 +6,15 @@ namespace Our.Umbraco.EmbeddedResource
     /// Attribute to register an embedded resource 
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    public class EmbeddedResourceProtectedAttribute : Attribute
+    public class EmbeddedResourceProtectedAttribute : Attribute, IEmbeddedResourceAttribute
     {
-        internal string ResourceNamespace { get; private set; }
+        private string ResourceNamespace;
 
-        internal string ResourceUrl { get; private set; }
+        private string ResourceUrl;
+
+        string IEmbeddedResourceAttribute.ResourceNamespace => this.ResourceNamespace;
+
+        string IEmbeddedResourceAttribute.ResourceUrl => this.ResourceUrl;
 
         /// <summary>
         /// Register an embedded resource in this assembly that is served only to back office authenticated users over http(s).
