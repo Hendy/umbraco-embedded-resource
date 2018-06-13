@@ -18,9 +18,10 @@ The assembly attribute (Our.Umbraco.EmbeddedResource.EmbeddedResourceAttribute) 
 * The app relative url that the resource should be served on
 * A flag to specify whether the resource should be protected (ie served to back office users only)
 
-## Example
-
     @using Our.Umbraco.EmbeddedResource
 
-    [assembly: EmbeddedResource("MyPackage.Example.jpg", "/AppPlugins/MyPackage/Example.jpg", false)] // public  
-    [assembly: EmbeddedResource("MyPackage.Example.png", "/AppPlugins/MyPackage/Example.png", true)] // back office users only
+    // register an embedded jpg as if it were on the file system    
+    [assembly: EmbeddedResource("MyPackage.Example.jpg", "/AppPlugins/MyPackage/Example.jpg")]
+    
+    // register an embedded png, served only to back office users    
+    [assembly: EmbeddedResource("MyPackage.Example.png", "/AppPlugins/MyPackage/Example.png", true)]
