@@ -11,12 +11,15 @@ Using embedded resources within an assembly for a package has a number of advant
 
 
 ## Usage
-Once the NuGet package has been installed, the embedded resources in your project need to be registered; this is done via assembly attributes (typically placed in /Properties/AssemblyInfo.cs).
+The embedded resources in your project need to be registered and this is done via assembly attributes (typically placed in /Properties/AssemblyInfo.cs).
 
-The assembly attribute (Our.Umbraco.EmbeddedResource.EmbeddedResourceAttribute) has three parameters:
+There are two assembly attributes: 
+* EmbeddedResourceAttribute
+* EmbeddedResourceProtectedAttribute 
+
+Both attributes have the same two required parameters:
 * The full namespace path to the embedded resource
 * The app relative url that the resource should be served on
-* A flag to specify whether the resource should be protected (served to back office users only)
 
 ## Example
 
@@ -26,4 +29,4 @@ The assembly attribute (Our.Umbraco.EmbeddedResource.EmbeddedResourceAttribute) 
     [assembly: EmbeddedResource("MyPackage.Example.jpg", "/AppPlugins/MyPackage/Example.jpg")]
     
     // register an embedded png, served only to back office users    
-    [assembly: EmbeddedResource("MyPackage.Example.png", "/AppPlugins/MyPackage/Example.png", true)]
+    [assembly: EmbeddedResourceProtected("MyPackage.Example.png", "/AppPlugins/MyPackage/Example.png")]
