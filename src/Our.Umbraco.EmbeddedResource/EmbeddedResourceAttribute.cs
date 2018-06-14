@@ -33,7 +33,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// <param name="resourceNamespace">The full namespace of the embedded resource file to register - eg. "MyProject.Folder.ExampleResource.html"</param>
         /// <param name="resourceUrl">The app relative url on which the resource file should be served - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"</param>
         /// <param name="backOfficeUserOnly">When true, this resource will only be served to a user logged into the back office</param>
-        [Obsolete("the bool flag will be removed in 0.2.0")]
+        [Obsolete("This overload wil be removed in 0.3.0")]
         public EmbeddedResourceAttribute(string resourceNamespace, string resourceUrl, bool backOfficeUserOnly = false)
         {
             this.ResourceNamespace = resourceNamespace;
