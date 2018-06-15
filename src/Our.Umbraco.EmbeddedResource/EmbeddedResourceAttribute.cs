@@ -3,7 +3,7 @@
 namespace Our.Umbraco.EmbeddedResource
 {
     /// <summary>
-    /// Attribe to register an embedded resource
+    /// Attribute to register an embedded resource
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class EmbeddedResourceAttribute : Attribute, IEmbeddedResourceAttribute

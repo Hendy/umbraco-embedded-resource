@@ -8,8 +8,6 @@ namespace Our.Umbraco.EmbeddedResource
 {
     public class EmbeddedResourceStartup : ApplicationEventHandler
     {
-        //private bool started = false;
-
         /// <summary>
         /// Ensure this event fires, even if Umbraco requires a new install or an upgrade
         /// </summary>
@@ -33,6 +31,9 @@ namespace Our.Umbraco.EmbeddedResource
             this.Startup();
         }
 
+        /// <summary>
+        /// The main startup method
+        /// </summary>
         private void Startup()
         {
             foreach (var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
