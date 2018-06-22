@@ -8,8 +8,14 @@ namespace Our.Umbraco.EmbeddedResource
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class EmbeddedResourceProtectedAttribute : Attribute, IEmbeddedResourceAttribute
     {
+        /// <summary>
+        /// The full namespace of the embedded resource file to register - eg. "MyProject.Folder.ExampleResource.html"<
+        /// </summary>
         private string ResourceNamespace;
 
+        /// <summary>
+        /// The app relative url on which the resource file should be served - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"
+        /// </summary>
         private string ResourceUrl;
 
         string IEmbeddedResourceAttribute.ResourceNamespace => this.ResourceNamespace;
