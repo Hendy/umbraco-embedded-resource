@@ -5,11 +5,11 @@ For use by Umbraco package developers to serve embedded resources.
 
 Using embedded resources within an assembly for a package has some of advantages:
 
-1) No need to split a package into two NuGet packages; often a class library project will also need to make a reference, so without the resource files being embedded, they would be added unnecessarily into the class library project.
+1) No need to split a package into two NuGet packages to prevent \App_Plugins\*.* files from added into a class library project.
 
-2) With embedded resources, there's nothing to add (other than a NuGet reference) into source control for the end consumer.
+2) There's nothing to add into source control (other than a NuGet reference) for the end consumer.
 
-3) Resources can be protected such that they are only served to back office authenticated users (so no [leakage as to what packages are installed](https://twitter.com/jschoemaker1984/status/1004231493240213505)).
+3) Resources can be protected so that they are only served to back office authenticated users (no [leakage as to what packages are installed](https://twitter.com/jschoemaker1984/status/1004231493240213505)).
 
 
 ## Usage
