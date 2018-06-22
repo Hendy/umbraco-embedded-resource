@@ -1,7 +1,9 @@
 # Umbraco Embedded Resource
 For use by Umbraco package developers to serve embedded resources.
 
-Using embedded resources within an assembly for a package has a number of advantages:
+[The NuGet package](https://www.nuget.org/packages/Our.Umbraco.EmbeddedResource) installs a single assembly _Our.Umbraco.EmbeddedResource.dll_.
+
+Using embedded resources within an assembly for a package has some of advantages:
 
 1) No need to split a package into two NuGet packages; often a class library project will also need to make a reference, so without the resource files being embedded, they would be added unnecessarily into the class library project.
 
@@ -11,13 +13,12 @@ Using embedded resources within an assembly for a package has a number of advant
 
 
 ## Usage
-[The NuGet package](https://www.nuget.org/packages/Our.Umbraco.EmbeddedResource) installs a single assembly _Our.Umbraco.EmbeddedResource.dll_.
 
 The embedded resources in your project need to be registered and this is done via assembly attributes (typically placed in /Properties/AssemblyInfo.cs).
 
 There are two assembly attributes: 
-* EmbeddedResourceAttribute
-* EmbeddedResourceProtectedAttribute 
+* [EmbeddedResourceAttribute](src/Our.Umbraco.EmbeddedResource/EmbeddedResourceAttribute.cs)
+* [EmbeddedResourceProtectedAttribute](src/Our.Umbraco.EmbeddedResource/EmbeddedResourceProtectedAttribute.cs)
 
 Both attributes have the same two required parameters:
 * The full namespace path to the embedded resource
