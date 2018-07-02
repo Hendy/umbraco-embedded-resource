@@ -13,17 +13,25 @@
 
         internal bool BackOfficeUserOnly { get; private set; }
 
+        internal bool ExtractToFileSystem { get; private set; }
+
         /// <summary>
-        /// constructor to set property values - ensures all mandatory values are supplied
+        /// internal constructor to ensure all mandatory values supplied
         /// </summary>
         /// <param name="resourceNamespace"></param>
         /// <param name="resourceUrl"></param>
-        internal EmbeddedResourceItem(string assemblyFullName, string resourceNamespace, string resourceUrl, bool backOfficeUserOnly)
+        internal EmbeddedResourceItem(
+            string assemblyFullName, 
+            string resourceNamespace, 
+            string resourceUrl, 
+            bool backOfficeUserOnly,
+            bool extractToFileSystem)
         {
             this.AssemblyFullName = assemblyFullName;
             this.ResourceNamespace = resourceNamespace;
             this.ResourceUrl = resourceUrl;
             this.BackOfficeUserOnly = backOfficeUserOnly;
+            this.ExtractToFileSystem = extractToFileSystem;
         }
     }
 }

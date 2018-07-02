@@ -38,22 +38,29 @@ namespace Our.Umbraco.EmbeddedResource
         {
             foreach (var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
             {
-                // register with mvc
-                RouteTable
-                    .Routes
-                    .MapRoute(
-                        name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                        url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
-                        defaults: new
-                        {
-                            controller = "EmbeddedResource",
-                            action = "GetEmbeddedResource",
-                            url = embeddedResourceItem.ResourceUrl
-                        },
-                        namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
+                if (embeddedResourceItem.ExtractToFileSystem)
+                {
+                    // call the service...
+                }
+                else 
+                {
+                    // register with mvc
+                    RouteTable
+                        .Routes
+                        .MapRoute(
+                            name: "EmbeddedResource" + Guid.NewGuid().ToString(),
+                            url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
+                            defaults: new
+                            {
+                                controller = "EmbeddedResource",
+                                action = "GetEmbeddedResource",
+                                url = embeddedResourceItem.ResourceUrl
+                            },
+                            namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
 
-                // register with client depenedency
-                FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
+                    // register with client depenedency
+                    FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
+                }
             }
         }
     }

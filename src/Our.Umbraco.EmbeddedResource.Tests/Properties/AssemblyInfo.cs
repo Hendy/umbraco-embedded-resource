@@ -38,3 +38,6 @@ using System.Runtime.InteropServices;
 
 // Attempt to register a valid resource with an invalid url
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+
+// Register a known resource to be extracted onto file-system
+//[assembly: EmbeddedResourceExtract("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", Constants.HTML_EMBEDDED_RESOURCE_URL)]

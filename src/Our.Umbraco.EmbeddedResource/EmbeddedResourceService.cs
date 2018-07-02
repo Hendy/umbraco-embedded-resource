@@ -12,20 +12,18 @@ namespace Our.Umbraco.EmbeddedResource
     internal static class EmbeddedResourceService
     {
         /// <summary>
-        /// Gets the full dataset of registered emebedded resource POCOs (either from cache, or by reflecting for assembly attributes)
+        /// Reflects for the assembly attributes and returns the full dataset as an array of POCOs
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
         internal static EmbeddedResourceItem[] GetEmbeddedResourceItems()
         {
-            var embeddedResourceItems = new List<EmbeddedResourceItem>(); // the return value
+            var embeddedResourceItems = new List<EmbeddedResourceItem>();
 
-            // TODO: add caching here to avoid attribute reflection
-
-            // for each of the attributes, get the resrouce & the url it should be served on, and put this table data somewhere
             foreach (var assembly in EmbeddedResourceService.GetAssemblies())
             {
                 var attributes = ((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceAttribute>())
-                                .Union((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceProtectedAttribute>());
+                                .Union((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceProtectedAttribute>())
+                                .Union((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceExtractAttribute>());
 
                 foreach (var attribute in attributes)
                 {                    
@@ -44,14 +42,17 @@ namespace Our.Umbraco.EmbeddedResource
                         else
                         {
                             var backOfficeUserOnly = attribute is EmbeddedResourceProtectedAttribute;
+                            var extractToFileSystem = attribute is EmbeddedResourceExtractAttribute;
 
-                            // add to collection, as item known to be valid
+
+                            // single creation point of item models
                             embeddedResourceItems.Add(
                                 new EmbeddedResourceItem(
                                     assembly.FullName, 
                                     attribute.ResourceNamespace, 
                                     url,
-                                    backOfficeUserOnly));
+                                    backOfficeUserOnly,
+                                    extractToFileSystem));
                         }
                     }
                 }

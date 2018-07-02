@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResourceAttribute.cs" />
+    <Compile Include="EmbeddedResourceExtractAttribute.cs" />
     <Compile Include="IEmbeddedResourceAttribute.cs" />
     <Compile Include="EmbeddedResourceController.cs" />
     <Compile Include="EmbeddedResourceItem.cs" />
