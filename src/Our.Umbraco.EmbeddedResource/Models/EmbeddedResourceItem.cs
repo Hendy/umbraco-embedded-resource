@@ -1,4 +1,4 @@
-﻿namespace Our.Umbraco.EmbeddedResource
+﻿namespace Our.Umbraco.EmbeddedResource.Models
 {
     /// <summary>
     /// lightweight POCO to represent a single emebedded resource item

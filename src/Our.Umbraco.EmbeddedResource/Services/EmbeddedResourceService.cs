@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.EmbeddedResource.Interfaces;
+using Our.Umbraco.EmbeddedResource.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

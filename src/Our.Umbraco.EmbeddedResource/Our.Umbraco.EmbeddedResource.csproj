@@ -178,7 +178,7 @@
     <Compile Include="EmbeddedResourceExtractAttribute.cs" />
     <Compile Include="Interfaces\IEmbeddedResourceAttribute.cs" />
     <Compile Include="Controllers\EmbeddedResourceController.cs" />
-    <Compile Include="EmbeddedResourceItem.cs" />
+    <Compile Include="Models\EmbeddedResourceItem.cs" />
     <Compile Include="EmbeddedResourceProtectedAttribute.cs" />
     <Compile Include="Services\EmbeddedResourceService.cs" />
     <Compile Include="Events\EmbeddedResourceStartup.cs" />
