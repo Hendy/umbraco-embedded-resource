@@ -14,12 +14,14 @@ namespace Our.Umbraco.EmbeddedResource.Services
     internal static class EmbeddedResourceService
     {
         /// <summary>
-        /// Builds an array of POCOs to represent the all consumer attributes found (excluding any conflicts, eg. can't extract two resources to the same file, or them on the samme url)
+        /// Builds an array of POCOs to represent the all consumer attributes found (excluds any conflicts - two different resources to the same file or url)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
         internal static EmbeddedResourceItem[] GetAllEmbeddedResourceItems()
         {
             var embeddedResourceItems = new List<EmbeddedResourceItem>();
+
+            // TODO: add caching, as called at least twice at the moment
 
             foreach (var assembly in EmbeddedResourceService.GetAssemblies())
             {
@@ -46,7 +48,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
                             var backOfficeUserOnly = attribute is EmbeddedResourceProtectedAttribute;
                             var extractToFileSystem = attribute is EmbeddedResourceExtractAttribute;
 
-                            /// there should only be a max possible 1 conflict, as conflicting items don't get added to this list
+                            // check this doesn't conflict with any already added
                             var conflict = embeddedResourceItems
                                             .SingleOrDefault(x => x.ExtractToFileSystem == extractToFileSystem && x.ResourceUrl == url);
 
@@ -102,7 +104,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <returns></returns>
         internal static bool ServedResourceExists(string url)
         {
-            return EmbeddedResourceService.GetServedEmbeddedResourceItem(url) != null; // TODO: ignore the extraction one
+            return EmbeddedResourceService.GetServedEmbeddedResourceItem(url) != null;
         }
 
         /// <summary>
@@ -113,6 +115,18 @@ namespace Our.Umbraco.EmbeddedResource.Services
         internal static Stream GetServedResourceStream(string url)
         {
             return EmbeddedResourceService.GetResourceStream(EmbeddedResourceService.GetServedEmbeddedResourceItem(url));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpContext">injected for unit testing</param>
+        /// <param name="embeddedResourceItem">the details of the resource to extract</param>
+        internal static void ExtractToFileSystem(HttpContextBase httpContext, EmbeddedResourceItem embeddedResourceItem)
+        {
+            if (embeddedResourceItem.ExtractToFileSystem) // safety check as only these should be passed in
+            {
+            }
         }
 
         /// <summary>
@@ -139,11 +153,6 @@ namespace Our.Umbraco.EmbeddedResource.Services
             }
 
             return null;
-        }
-
-        internal static void ExtractToFileSystem(EmbeddedResourceItem embeddedResourceItem)
-        {
-
         }
 
         /// <summary>

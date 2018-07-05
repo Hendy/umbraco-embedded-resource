@@ -2,6 +2,7 @@
 using Our.Umbraco.EmbeddedResource.ClientDependency;
 using Our.Umbraco.EmbeddedResource.Services;
 using System;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Umbraco.Core;
@@ -30,19 +31,19 @@ namespace Our.Umbraco.EmbeddedResource.Events
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            this.Startup();
+            this.Startup(new HttpContextWrapper(HttpContext.Current));
         }
 
         /// <summary>
         /// The main startup method
         /// </summary>
-        private void Startup()
+        private void Startup(HttpContextBase httpContext)
         {
             foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
             {
                 if (embeddedResourceItem.ExtractToFileSystem)
                 {
-                    EmbeddedResourceService.ExtractToFileSystem(embeddedResourceItem);
+                    EmbeddedResourceService.ExtractToFileSystem(httpContext, embeddedResourceItem);
                 }
                 else // must be the default or the protected attribute, so to be served
                 {

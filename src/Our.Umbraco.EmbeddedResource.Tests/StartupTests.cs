@@ -12,7 +12,9 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [AssemblyInitialize]
         public static void Initialize(TestContext testContext)
         {
-            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup");
+            var httpContextMock = new Mock<HttpContextBase>();
+
+            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup", httpContextMock.Object);
         }
 
         [TestMethod]
