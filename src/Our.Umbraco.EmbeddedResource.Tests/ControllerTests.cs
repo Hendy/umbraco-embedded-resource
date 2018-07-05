@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Our.Umbraco.EmbeddedResource.Controllers;
 using System.Web;
 using System.Web.Mvc;
 using Umbraco.Web;

@@ -3,7 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using Umbraco.Core.Security;
 
-namespace Our.Umbraco.EmbeddedResource
+namespace Our.Umbraco.EmbeddedResource.Controllers
 {
     /// <summary>
     /// Controller to handle serving the embedded resource

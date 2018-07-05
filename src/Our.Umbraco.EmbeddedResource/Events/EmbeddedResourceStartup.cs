@@ -55,7 +55,7 @@ namespace Our.Umbraco.EmbeddedResource.Events
                                 action = "GetEmbeddedResource",
                                 url = embeddedResourceItem.ResourceUrl
                             },
-                            namespaces: new[] { "Our.Umbraco.EmbeddedResource" });
+                            namespaces: new[] { "Our.Umbraco.EmbeddedResource.Controllers" });
 
                     // register with client depenedency
                     FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
