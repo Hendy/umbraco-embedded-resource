@@ -44,15 +44,26 @@ namespace Our.Umbraco.EmbeddedResource
                             var backOfficeUserOnly = attribute is EmbeddedResourceProtectedAttribute;
                             var extractToFileSystem = attribute is EmbeddedResourceExtractAttribute;
 
+                            /// there should only be a max possible 1 conflict, as conflicting items don't get added to this list
+                            var conflict = embeddedResourceItems.SingleOrDefault(x => x.ExtractToFileSystem == extractToFileSystem && x.ResourceUrl == url);
 
-                            // single creation point of item models
-                            embeddedResourceItems.Add(
-                                new EmbeddedResourceItem(
-                                    assembly.FullName, 
-                                    attribute.ResourceNamespace, 
-                                    url,
-                                    backOfficeUserOnly,
-                                    extractToFileSystem));
+                            if (conflict != null) 
+                            {
+                                LogHelper.Warn(typeof(EmbeddedResourceService),
+                                    $"Conflict with existing registration: (Resource: '{conflict.ResourceNamespace}', Url: '{conflict.ResourceUrl}') " +
+                                    $"When trying to register (Resource: '{attribute.ResourceNamespace}', Url: '{url}') ");
+                            }
+                            else // no conflict
+                            {
+                                // single creation point of item models
+                                embeddedResourceItems.Add(
+                                    new EmbeddedResourceItem(
+                                        assembly.FullName,
+                                        attribute.ResourceNamespace,
+                                        url,
+                                        backOfficeUserOnly,
+                                        extractToFileSystem));
+                            }
                         }
                     }
                 }
@@ -62,17 +73,20 @@ namespace Our.Umbraco.EmbeddedResource
         }
 
         /// <summary>
-        /// Attempt to get a specific configuration from the request url
+        /// Attempt to get resource item that will be serveed on a url, by url (ignores any registrations for extracting to file system)
         /// </summary>
         /// <param name="url"></param>
-        /// <returns></returns>
-        internal static EmbeddedResourceItem GetEmbeddedResourceItem(string url)
+        /// <returns>the embedded resource item or null</returns>
+        internal static EmbeddedResourceItem GetServedEmbeddedResourceItem(string url)
         {
             url = EmbeddedResourceService.EnsureUrlAppRelative(url);
 
             if (url != null)
             {
-                return EmbeddedResourceService.GetEmbeddedResourceItems().SingleOrDefault(x => x.ResourceUrl == url);
+                return EmbeddedResourceService
+                            .GetEmbeddedResourceItems()
+                            .Where(x => !x.ExtractToFileSystem)
+                            .SingleOrDefault(x => x.ResourceUrl == url);
             }
 
             return null;
@@ -83,9 +97,9 @@ namespace Our.Umbraco.EmbeddedResource
         /// </summary>
         /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
         /// <returns></returns>
-        internal static bool ResourceExists(string url)
+        internal static bool ServedResourceExists(string url)
         {
-            return EmbeddedResourceService.GetEmbeddedResourceItem(url) != null;
+            return EmbeddedResourceService.GetServedEmbeddedResourceItem(url) != null; // TODO: ignore the extraction one
         }
 
         /// <summary>
@@ -93,9 +107,9 @@ namespace Our.Umbraco.EmbeddedResource
         /// </summary>
         /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
         /// <returns>a stream or null</returns>
-        internal static Stream GetResourceStream(string url)
+        internal static Stream GetServedResourceStream(string url)
         {
-            return EmbeddedResourceService.GetResourceStream(EmbeddedResourceService.GetEmbeddedResourceItem(url));
+            return EmbeddedResourceService.GetResourceStream(EmbeddedResourceService.GetServedEmbeddedResourceItem(url));
         }
 
         /// <summary>
@@ -124,19 +138,24 @@ namespace Our.Umbraco.EmbeddedResource
             return null;
         }
 
+        internal static void ExtractToFileSystem(EmbeddedResourceItem embeddedResourceItem)
+        {
+
+        }
+
         /// <summary>
-        /// single collection of assemblies that contain registered embedded resources
+        /// get all assemblies that contain any of the attributes
         /// </summary>
         /// <returns></returns>
         private static Assembly[] GetAssemblies()
         {
-            // TODO: add caching here
             return AppDomain
                     .CurrentDomain
                     .GetAssemblies()
                     .Where(x => 
                         x.GetCustomAttributes<EmbeddedResourceAttribute>().Any() || 
-                        x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>().Any())
+                        x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>().Any() ||
+                        x.GetCustomAttributes< EmbeddedResourceExtractAttribute>().Any())
                     .ToArray();
         }
 

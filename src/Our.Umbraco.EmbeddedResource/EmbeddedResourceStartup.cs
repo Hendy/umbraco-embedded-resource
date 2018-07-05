@@ -40,11 +40,10 @@ namespace Our.Umbraco.EmbeddedResource
             {
                 if (embeddedResourceItem.ExtractToFileSystem)
                 {
-                    // call the service...
+                    EmbeddedResourceService.ExtractToFileSystem(embeddedResourceItem);
                 }
-                else 
+                else // must be the default or the protected attribute, so to be served
                 {
-                    // register with mvc
                     RouteTable
                         .Routes
                         .MapRoute(

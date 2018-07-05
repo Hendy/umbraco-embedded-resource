@@ -14,7 +14,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns></returns>
         public bool FileExists(string virtualFile)
         {
-            return EmbeddedResourceService.ResourceExists(virtualFile);
+            return EmbeddedResourceService.ServedResourceExists(virtualFile);
         }
 
         /// <summary>

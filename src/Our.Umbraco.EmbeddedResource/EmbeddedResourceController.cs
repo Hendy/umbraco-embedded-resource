@@ -17,7 +17,7 @@ namespace Our.Umbraco.EmbeddedResource
         /// <returns></returns>
         public ActionResult GetEmbeddedResource(string url)
         {
-            var embeddedResourceItem = EmbeddedResourceService.GetEmbeddedResourceItem(url);
+            var embeddedResourceItem = EmbeddedResourceService.GetServedEmbeddedResourceItem(url);
 
             if (embeddedResourceItem != null)
             {
