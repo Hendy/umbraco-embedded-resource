@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Umbraco.Core;
 
-namespace Our.Umbraco.EmbeddedResource
+namespace Our.Umbraco.EmbeddedResource.Events
 {
     public class EmbeddedResourceStartup : ApplicationEventHandler
     {

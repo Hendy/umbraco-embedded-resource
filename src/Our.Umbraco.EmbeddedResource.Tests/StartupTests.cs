@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Our.Umbraco.EmbeddedResource.Events;
 using System.Web;
 using System.Web.Routing;
 
