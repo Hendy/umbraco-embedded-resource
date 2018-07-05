@@ -15,7 +15,7 @@ namespace Our.Umbraco.EmbeddedResource
         private string ResourceNamespace;
 
         /// <summary>
-        /// The app relative url on which the resource file should be served - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"
+        /// The app relative url on which the resource file should map to the file system from - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"
         /// </summary>
         private string ResourceUrl;
 

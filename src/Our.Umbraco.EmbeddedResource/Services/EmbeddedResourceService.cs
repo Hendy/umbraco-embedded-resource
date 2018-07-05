@@ -14,11 +14,10 @@ namespace Our.Umbraco.EmbeddedResource.Services
     internal static class EmbeddedResourceService
     {
         /// <summary>
-        /// Builds an array of POCOs to represent the consumer attributes found (any conflicts are excluded, for example, can't
-        /// extract two resources to the same file, or serve different resources on the samme url)
+        /// Builds an array of POCOs to represent the all consumer attributes found (excluding any conflicts, eg. can't extract two resources to the same file, or them on the samme url)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
-        internal static EmbeddedResourceItem[] GetEmbeddedResourceItems()
+        internal static EmbeddedResourceItem[] GetAllEmbeddedResourceItems()
         {
             var embeddedResourceItems = new List<EmbeddedResourceItem>();
 
@@ -48,7 +47,8 @@ namespace Our.Umbraco.EmbeddedResource.Services
                             var extractToFileSystem = attribute is EmbeddedResourceExtractAttribute;
 
                             /// there should only be a max possible 1 conflict, as conflicting items don't get added to this list
-                            var conflict = embeddedResourceItems.SingleOrDefault(x => x.ExtractToFileSystem == extractToFileSystem && x.ResourceUrl == url);
+                            var conflict = embeddedResourceItems
+                                            .SingleOrDefault(x => x.ExtractToFileSystem == extractToFileSystem && x.ResourceUrl == url);
 
                             if (conflict != null) 
                             {
@@ -87,7 +87,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
             if (url != null)
             {
                 return EmbeddedResourceService
-                            .GetEmbeddedResourceItems()
+                            .GetAllEmbeddedResourceItems()
                             .Where(x => !x.ExtractToFileSystem)
                             .SingleOrDefault(x => x.ResourceUrl == url);
             }

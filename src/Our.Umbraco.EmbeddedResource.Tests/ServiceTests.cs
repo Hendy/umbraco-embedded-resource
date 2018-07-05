@@ -15,7 +15,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetEmbeddedResourceItems")]
         public void GetEmbeddedResourceItems_ExpectedCount_BackOfficeUserOnly()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetEmbeddedResourceItems();
+            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(1, embeddedResourceItems.Where(x => x.BackOfficeUserOnly).Count());

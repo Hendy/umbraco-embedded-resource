@@ -38,7 +38,7 @@ namespace Our.Umbraco.EmbeddedResource.Events
         /// </summary>
         private void Startup()
         {
-            foreach (var embeddedResourceItem in EmbeddedResourceService.GetEmbeddedResourceItems())
+            foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
             {
                 if (embeddedResourceItem.ExtractToFileSystem)
                 {
