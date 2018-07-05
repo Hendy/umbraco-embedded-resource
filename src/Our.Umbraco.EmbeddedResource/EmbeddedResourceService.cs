@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Our.Umbraco.EmbeddedResource.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace Our.Umbraco.EmbeddedResource
     internal static class EmbeddedResourceService
     {
         /// <summary>
-        /// Reflects for the assembly attributes and returns the full dataset as an array of POCOs
+        /// Builds an array of POCOs to represent the consumer attributes found (any conflicts are excluded, for example, can't
+        /// extract two resources to the same file, or serve different resources on the samme url)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
         internal static EmbeddedResourceItem[] GetEmbeddedResourceItems()

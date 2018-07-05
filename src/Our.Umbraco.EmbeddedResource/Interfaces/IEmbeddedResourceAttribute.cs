@@ -1,4 +1,4 @@
-﻿namespace Our.Umbraco.EmbeddedResource
+﻿namespace Our.Umbraco.EmbeddedResource.Interfaces
 {
     internal interface IEmbeddedResourceAttribute
     {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Our.Umbraco.EmbeddedResource.Interfaces;
+using System;
 
 namespace Our.Umbraco.EmbeddedResource
 {
