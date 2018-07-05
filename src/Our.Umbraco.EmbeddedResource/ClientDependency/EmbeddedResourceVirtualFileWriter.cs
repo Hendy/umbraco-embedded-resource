@@ -6,7 +6,7 @@ using System.IO;
 using System.Web;
 using Umbraco.Core.Logging;
 
-namespace Our.Umbraco.EmbeddedResource
+namespace Our.Umbraco.EmbeddedResource.ClientDependency
 {
     /// <summary>
     /// The embedded resource writer.

@@ -2,7 +2,7 @@
 using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 
-namespace Our.Umbraco.EmbeddedResource
+namespace Our.Umbraco.EmbeddedResource.ClientDependency
 {
     /// <summary>
     /// The embedded resource virtual file.

@@ -1,4 +1,5 @@
 ﻿using ClientDependency.Core;
+using Our.Umbraco.EmbeddedResource.ClientDependency;
 using Our.Umbraco.EmbeddedResource.Services;
 using System;
 using System.Web.Mvc;
