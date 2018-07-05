@@ -8,7 +8,7 @@ using System.Web;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
-namespace Our.Umbraco.EmbeddedResource
+namespace Our.Umbraco.EmbeddedResource.Services
 {
     internal static class EmbeddedResourceService
     {
@@ -157,7 +157,7 @@ namespace Our.Umbraco.EmbeddedResource
                     .Where(x => 
                         x.GetCustomAttributes<EmbeddedResourceAttribute>().Any() || 
                         x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>().Any() ||
-                        x.GetCustomAttributes< EmbeddedResourceExtractAttribute>().Any())
+                        x.GetCustomAttributes<EmbeddedResourceExtractAttribute>().Any())
                     .ToArray();
         }
 

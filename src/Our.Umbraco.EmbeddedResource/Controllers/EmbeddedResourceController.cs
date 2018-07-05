@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Our.Umbraco.EmbeddedResource.Services;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using Umbraco.Core.Security;

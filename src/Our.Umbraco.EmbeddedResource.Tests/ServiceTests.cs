@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 using System.Linq;
 

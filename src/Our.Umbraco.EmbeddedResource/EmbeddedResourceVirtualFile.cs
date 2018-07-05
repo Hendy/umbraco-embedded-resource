@@ -1,4 +1,5 @@
 ﻿using ClientDependency.Core.CompositeFiles;
+using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 
 namespace Our.Umbraco.EmbeddedResource

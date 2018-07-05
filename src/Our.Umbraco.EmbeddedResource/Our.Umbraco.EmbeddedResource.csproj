@@ -180,7 +180,7 @@
     <Compile Include="Controllers\EmbeddedResourceController.cs" />
     <Compile Include="EmbeddedResourceItem.cs" />
     <Compile Include="EmbeddedResourceProtectedAttribute.cs" />
-    <Compile Include="EmbeddedResourceService.cs" />
+    <Compile Include="Services\EmbeddedResourceService.cs" />
     <Compile Include="Events\EmbeddedResourceStartup.cs" />
     <Compile Include="EmbeddedResourceVirtualFile.cs" />
     <Compile Include="EmbeddedResourceVirtualFileProvider.cs" />
