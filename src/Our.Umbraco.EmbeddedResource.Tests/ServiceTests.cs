@@ -21,6 +21,8 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.AreEqual(1, embeddedResourceItems.Where(x => x.BackOfficeUserOnly).Count());
         }
 
+        #region ResourceExists
+
         [TestMethod]
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Html()
@@ -62,6 +64,10 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             Assert.IsFalse(EmbeddedResourceService.ServedResourceExists(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL));
         }
+
+        #endregion
+
+        #region GetResourceStream
 
         [TestMethod]
         [TestCategory("Service_GetResourceStream")]
@@ -119,5 +125,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             Assert.IsNull(EmbeddedResourceService.GetServedResourceStream(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL));
         }
+
+        #endregion
     }
 }

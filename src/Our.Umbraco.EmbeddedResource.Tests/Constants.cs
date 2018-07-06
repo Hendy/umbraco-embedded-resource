@@ -18,6 +18,6 @@
         /// <summary>
         /// a valid relative url, but with no corresponding embedded resource
         /// </summary>
-        internal const string UNKNOWN_EMBEDDED_RESOURCE_URL = "~/App_Plugins/EmbeddedResourceTests/Unknown.txt"; // never registered
+        internal const string UNKNOWN_EMBEDDED_RESOURCE_URL = "~/App_Plugins/EmbeddedResourceTests/Unknown.txt";        
     }
 }

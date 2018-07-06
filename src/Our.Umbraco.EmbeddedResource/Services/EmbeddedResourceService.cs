@@ -14,7 +14,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
     internal static class EmbeddedResourceService
     {
         /// <summary>
-        /// Builds an array of POCOs to represent the all consumer attributes found (excluds any conflicts - two different resources to the same file or url)
+        /// Builds an array of POCOs to represent the all consumer attributes found (excludes any conflicts - two different resources to the same file or url)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
         internal static EmbeddedResourceItem[] GetAllEmbeddedResourceItems()
@@ -124,8 +124,33 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <param name="embeddedResourceItem">the details of the resource to extract</param>
         internal static void ExtractToFileSystem(HttpContextBase httpContext, EmbeddedResourceItem embeddedResourceItem)
         {
-            if (embeddedResourceItem.ExtractToFileSystem) // safety check as only these should be passed in
+            if (!embeddedResourceItem.ExtractToFileSystem)
             {
+                LogHelper.Warn(typeof(EmbeddedResourceService), $"This should never happen - attempting to extract resource '{embeddedResourceItem.ResourceNamespace}' not marked for extraction");
+            }
+            else
+            {
+                var path = httpContext.Server.MapPath(embeddedResourceItem.ResourceUrl);
+
+                if (File.Exists(path)) //should it overwrite ?
+                {
+                    LogHelper.Info(typeof(EmbeddedResourceService), $"Attempting to extract resource '{embeddedResourceItem.ResourceNamespace}', but file '{path}' already exists");
+                }
+                else
+                {
+                    var resourceStream = EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
+
+                    if (resourceStream != null)
+                    {
+                        new FileInfo(path).Directory.Create();
+
+                        using (var fileStream = File.Create(path))
+                        {
+                            resourceStream.Seek(0, SeekOrigin.Begin);
+                            resourceStream.CopyTo(fileStream);
+                        }
+                    }
+                }
             }
         }
 

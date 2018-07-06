@@ -41,11 +41,7 @@ namespace Our.Umbraco.EmbeddedResource.Events
         {
             foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
             {
-                if (embeddedResourceItem.ExtractToFileSystem)
-                {
-                    EmbeddedResourceService.ExtractToFileSystem(httpContext, embeddedResourceItem);
-                }
-                else // must be the default or the protected attribute, so to be served
+                if (!embeddedResourceItem.ExtractToFileSystem)
                 {
                     RouteTable
                         .Routes
@@ -62,6 +58,10 @@ namespace Our.Umbraco.EmbeddedResource.Events
 
                     // register with client depenedency
                     FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
+                }
+                else // extract to file-system
+                {
+                    EmbeddedResourceService.ExtractToFileSystem(httpContext, embeddedResourceItem);
                 }
             }
         }

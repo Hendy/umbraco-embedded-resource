@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Our.Umbraco.EmbeddedResource.Events;
+using System.IO;
 using System.Web;
 using System.Web.Routing;
 
@@ -14,8 +15,14 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var httpContextMock = new Mock<HttpContextBase>();
 
+            httpContextMock
+                .Setup(x => x.Server.MapPath(It.IsAny<string>()))
+                .Returns((string x) => Helper.MapPath(x));
+
             new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup", httpContextMock.Object);
         }
+
+        #region Routing
 
         [TestMethod]
         [TestCategory("Startup_Routing")]
@@ -109,5 +116,20 @@ namespace Our.Umbraco.EmbeddedResource.Tests
 
             Assert.IsNull(routeData);
         }
+
+        #endregion
+
+        #region Extraction
+
+
+        //[assembly: EmbeddedResourceExtract("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", Constants.HTML_EMBEDDED_RESOURCE_URL)]
+        [TestMethod]
+        [TestCategory("Startup_Extraction")]
+        public void Extraction_Html()
+        {
+            Assert.IsTrue(File.Exists(Helper.MapPath(Constants.HTML_EMBEDDED_RESOURCE_URL)));
+        }
+
+        #endregion
     }
 }
