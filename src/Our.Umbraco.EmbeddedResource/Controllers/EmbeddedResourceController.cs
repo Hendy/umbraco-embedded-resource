@@ -2,7 +2,6 @@
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using Umbraco.Core.Security;
 
 namespace Our.Umbraco.EmbeddedResource.Controllers
 {
@@ -11,18 +10,37 @@ namespace Our.Umbraco.EmbeddedResource.Controllers
     /// </summary>
     public class EmbeddedResourceController : Controller
     {
+        private EmbeddedResourceService _embeddedResourceService; 
+
         /// <summary>
-        /// 
+        /// Production constructor
         /// </summary>
-        /// <param name="url">The (app relative) resource url (passed in to avoid using the http context)</param>
-        /// <returns></returns>
-        public ActionResult GetEmbeddedResource(string url)
+        public EmbeddedResourceController() : base()
         {
-            var embeddedResourceItem = EmbeddedResourceService.GetServedEmbeddedResourceItem(url);
+            this._embeddedResourceService = new EmbeddedResourceService(this.HttpContext);
+        }
+
+        /// <summary>
+        /// Unit testing constructor
+        /// </summary>
+        /// <param name="embeddedResourceService">custom service to inject</param>
+        internal EmbeddedResourceController(EmbeddedResourceService embeddedResourceService)
+        {
+            this._embeddedResourceService = embeddedResourceService;
+        }
+
+        /// <summary>
+        /// Attempts to return a resource
+        /// </summary>
+        /// <param name="url">The (app relative) resource url</param>
+        /// <returns>The resource or HttpNotFound</returns>
+        public ActionResult GetEmbeddedResource(string url) // rename to served
+        {
+            var embeddedResourceItem = this._embeddedResourceService.GetServedEmbeddedResourceItem(url);
 
             if (embeddedResourceItem != null)
             {
-                if (!embeddedResourceItem.BackOfficeUserOnly || this.IsBackOfficeUser())
+                if (!embeddedResourceItem.BackOfficeUserOnly || this._embeddedResourceService.IsBackOfficeUser())
                 {
                     var resourceStream = EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
 
@@ -34,23 +52,6 @@ namespace Our.Umbraco.EmbeddedResource.Controllers
             }
 
             return this.HttpNotFound();
-        }
-
-        /// <summary>
-        /// returns true if the current request is logged in as a back office user
-        /// </summary>
-        /// <returns></returns>
-        private bool IsBackOfficeUser()
-        {
-            if (this.HttpContext != null)
-            {
-                var context = this.HttpContext;
-                var ticket = this.HttpContext.GetUmbracoAuthTicket();
-
-                return context.AuthenticateCurrentRequest(ticket, true);
-            }
-
-            return false;
         }
 
         /// <summary>

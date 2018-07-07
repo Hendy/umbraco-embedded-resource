@@ -10,11 +10,6 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
     internal class EmbeddedResourceVirtualFile : IVirtualFile
     {
         /// <summary>
-        /// The virtual file
-        /// </summary>
-        private readonly string virtualFile;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedResourceVirtualFile"/> class. 
         /// Initializes a new instance of the <see cref="T:System.Web.Hosting.VirtualFile"/> class. 
         /// </summary>
@@ -23,7 +18,7 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         /// </param>
         public EmbeddedResourceVirtualFile(string virtualFile)
         {
-            this.virtualFile = virtualFile;
+            this.Path = virtualFile;
         }
 
         /// <summary>
@@ -34,18 +29,12 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         /// </returns>
         public Stream Open()
         {
-            return EmbeddedResourceService.GetServedResourceStream(this.virtualFile);
+            return new EmbeddedResourceService().GetServedResourceStream(this.Path);
         }
 
         /// <summary>
         /// Gets the path.
         /// </summary>
-        public string Path
-        {
-            get
-            {
-                return this.virtualFile;
-            }
-        }
+        public string Path { get; }
     }
 }

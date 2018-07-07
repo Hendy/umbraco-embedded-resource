@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Our.Umbraco.EmbeddedResource.Controllers;
-using System.Web;
 using System.Web.Mvc;
-using Umbraco.Web;
-using UmbracoWebSecurity = Umbraco.Web.Security.WebSecurity;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
@@ -70,17 +66,21 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.IsInstanceOfType(embeddedResource, typeof(HttpNotFoundResult));
         }
 
-        //[TestMethod]
-        //public void GetEmbeddedResource_Protected_LoggedIn()
-        //{
-        //    var controller = new EmbeddedResourceController();
+        [TestMethod]
+        public void GetEmbeddedResource_Protected_LoggedIn()
+        {
+            var mockService = Helper.GetMockEmbeddedResourceService();
 
-        //    var embeddedResource = controller.GetEmbeddedResource(Constants.PROTECTED_RESOURCE_URL);
+            mockService.Setup(x => x.IsBackOfficeUser()).Returns(true);
+                
+            var controller = new EmbeddedResourceController(mockService.Object);
 
-        //    Assert.IsNotNull(embeddedResource);
-        //    Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
-        //    Assert.AreEqual("text/plain", ((FileStreamResult)embeddedResource).ContentType);
-        //}
+            var embeddedResource = controller.GetEmbeddedResource(Constants.PROTECTED_RESOURCE_URL);
+
+            Assert.IsNotNull(embeddedResource);
+            Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
+            Assert.AreEqual("text/plain", ((FileStreamResult)embeddedResource).ContentType);
+        }
 
         /// <summary>
         /// valid url request, but no associated embedded resource

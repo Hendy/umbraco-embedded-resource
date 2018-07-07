@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 using System.Web;
 
@@ -24,6 +25,17 @@ namespace Our.Umbraco.EmbeddedResource.Tests
               .Returns((string x) => Helper.MapPath(x));
 
             return httpContextMock;
+        }
+
+        /// <summary>
+        /// Gets a mock of the service that doesn't read in the assembly attributes, but are set for testing purposes
+        /// </summary>
+        /// <returns></returns>
+        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService()
+        {
+            var embeddedResourceService = new Mock<EmbeddedResourceService>(Helper.GetMockHttpContext().Object);
+
+            return embeddedResourceService;
         }
 
         internal static void WipeTempFolder()

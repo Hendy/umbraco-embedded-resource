@@ -12,12 +12,27 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Security;
 
 namespace Our.Umbraco.EmbeddedResource.Services
 {
-    internal static class EmbeddedResourceService
+    internal class EmbeddedResourceService
     {
-        // this was previously in the startup event, but it didn't belong there
+        private HttpContextBase _httpContext;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpContext"></param>
+        internal EmbeddedResourceService(HttpContextBase httpContext = null)
+        {
+            this._httpContext = httpContext;
+        }
+
+        /// <summary>
+        /// Look for all attributes and build the data-set
+        /// </summary>
+        /// <param name="httpContext"></param>
         internal static void RegisterResources(HttpContextBase httpContext)
         {
             foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
@@ -116,7 +131,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// </summary>
         /// <param name="url"></param>
         /// <returns>the embedded resource item or null</returns>
-        internal static EmbeddedResourceItem GetServedEmbeddedResourceItem(string url)
+        internal EmbeddedResourceItem GetServedEmbeddedResourceItem(string url)
         {
             url = EmbeddedResourceService.EnsureUrlAppRelative(url);
 
@@ -136,9 +151,9 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// </summary>
         /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
         /// <returns></returns>
-        internal static bool ServedResourceExists(string url)
+        internal bool ServedResourceExists(string url)
         {
-            return EmbeddedResourceService.GetServedEmbeddedResourceItem(url) != null;
+            return this.GetServedEmbeddedResourceItem(url) != null;
         }
 
         /// <summary>
@@ -146,9 +161,9 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// </summary>
         /// <param name="url">Either the full url (that can be converted to app relative) or an app relative url</param>
         /// <returns>a stream or null</returns>
-        internal static Stream GetServedResourceStream(string url)
+        internal Stream GetServedResourceStream(string url)
         {
-            return EmbeddedResourceService.GetResourceStream(EmbeddedResourceService.GetServedEmbeddedResourceItem(url));
+            return EmbeddedResourceService.GetResourceStream(this.GetServedEmbeddedResourceItem(url));
         }
 
         /// <summary>
@@ -212,6 +227,23 @@ namespace Our.Umbraco.EmbeddedResource.Services
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// returns true if the current request is logged in as a back office user
+        /// https://our.umbraco.com/forum/umbraco-7/using-umbraco-7/72798-how-to-check-if-an-umbraco-user-is-logged-in-on-a-frontend-request
+        /// </summary>
+        /// <returns></returns>
+        internal virtual bool IsBackOfficeUser()
+        {
+            if (this._httpContext != null)
+            {
+                var ticket = this._httpContext.GetUmbracoAuthTicket();
+
+                return this._httpContext.AuthenticateCurrentRequest(ticket, true);
+            }
+
+            return false;
         }
 
         /// <summary>

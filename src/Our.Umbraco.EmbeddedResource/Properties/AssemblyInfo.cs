@@ -36,4 +36,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("0.3.0.0")]
 
 // ensure the tests project can see internals
-[assembly:InternalsVisibleTo("Our.Umbraco.EmbeddedResource.Tests")]
+[assembly: InternalsVisibleTo("Our.Umbraco.EmbeddedResource.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // for Moq

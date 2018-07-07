@@ -14,20 +14,20 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
     public sealed class EmbeddedResourceVirtualFileWriter : IVirtualFileWriter
     {
         public bool WriteToStream(
-                    BaseCompositeFileProcessingProvider provider, 
-                    StreamWriter sw, 
-                    IVirtualFile vf, 
-                    ClientDependencyType type, 
-                    string origUrl, 
-                    HttpContextBase http)
+                        BaseCompositeFileProcessingProvider provider, 
+                        StreamWriter streamWriter, 
+                        IVirtualFile virtualFile, 
+                        ClientDependencyType type, 
+                        string originalUrl, 
+                        HttpContextBase httpContext)
         {
             try
             {
-                using (var readStream = vf.Open())
+                using (var readStream = virtualFile.Open())
                 using (var streamReader = new StreamReader(readStream))
                 {
                     var output = streamReader.ReadToEnd();
-                    DefaultFileWriter.WriteContentToStream(provider, sw, output, type, http, origUrl);
+                    DefaultFileWriter.WriteContentToStream(provider, streamWriter, output, type, httpContext, originalUrl);
                     return true;
                 }
             }
@@ -42,9 +42,6 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         /// <summary>
         /// Gets the file provider.
         /// </summary>
-        public IVirtualFileProvider FileProvider
-        {
-            get { return new EmbeddedResourceVirtualFileProvider(); }
-        }
+        public IVirtualFileProvider FileProvider => new EmbeddedResourceVirtualFileProvider();
     }
 }

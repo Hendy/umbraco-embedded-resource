@@ -57,7 +57,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         [TestMethod]
-        public void ExpectingSixResources()
+        public void ExpectingSixTotalResources()
         {
             var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
