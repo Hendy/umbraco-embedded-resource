@@ -12,12 +12,19 @@ namespace Our.Umbraco.EmbeddedResource.Controllers
     {
         private EmbeddedResourceService _embeddedResourceService; 
 
+        private EmbeddedResourceService EmbeddedResourceService
+        {
+            get
+            {
+                return _embeddedResourceService ?? new EmbeddedResourceService(this.HttpContext);
+            }
+        }
+
         /// <summary>
         /// Production constructor
         /// </summary>
         public EmbeddedResourceController() : base()
         {
-            this._embeddedResourceService = new EmbeddedResourceService(this.HttpContext);
         }
 
         /// <summary>
@@ -36,11 +43,11 @@ namespace Our.Umbraco.EmbeddedResource.Controllers
         /// <returns>The resource or HttpNotFound</returns>
         public ActionResult GetEmbeddedResource(string url) // rename to served
         {
-            var embeddedResourceItem = this._embeddedResourceService.GetServedEmbeddedResourceItem(url);
+            var embeddedResourceItem = this.EmbeddedResourceService.GetServedEmbeddedResourceItem(url);
 
             if (embeddedResourceItem != null)
             {
-                if (!embeddedResourceItem.BackOfficeUserOnly || this._embeddedResourceService.IsBackOfficeUser())
+                if (!embeddedResourceItem.BackOfficeUserOnly || this.EmbeddedResourceService.IsBackOfficeUser())
                 {
                     var resourceStream = EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
 
