@@ -1,135 +1,111 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using Our.Umbraco.EmbeddedResource;
 using Our.Umbraco.EmbeddedResource.Events;
+using Our.Umbraco.EmbeddedResource.Services;
+using Our.Umbraco.EmbeddedResource.Tests;
 using System.IO;
-using System.Web;
-using System.Web.Routing;
+using System.Linq;
+
+// Valid registrations ----------------------------------------
+
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", Constants.HTML_RESOURCE_URL)]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_RESOURCE_URL)]
+//[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", Constants.PNG_RESOURCE_URL)] // commented out so can test without tide prefix
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", "/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png")] // to test it registers without the tide prefix
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt", Constants.TXT_RESOURCE_URL)]
+
+// Register a known resource on another url, and set to protected
+[assembly: EmbeddedResourceProtected("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt", Constants.PROTECTED_RESOURCE_URL)]
+
+// Register a known resource to be extracted onto file-system
+[assembly: EmbeddedResourceExtract("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", Constants.HTML_RESOURCE_URL)]
+
+// Invalid registrations ----------------------------------------
+
+// Attempt to register duplicates - ignored as attribute definitions are identical
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_RESOURCE_URL)]
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_RESOURCE_URL)]
+
+// Attempt to register an invalid resource with a valid url
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.Missing.html", "/App_Plugins/EmbeddedResourceTests/Missing.html")]
+
+// Attempt to register a valid resource with an invalid url
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+
+// Attempt to register an invalid resource with an invalid url
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.Resources.Missing.html", "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+
 
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
+    /// <summary>
+    /// Calls the startup event once (as Umbraco would do) which will register the assembly attributes (above)
+    /// </summary>
     [TestClass]
     public class StartupTests
     {
-        [AssemblyInitialize]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testContext"></param>
+        [AssemblyInitialize] // Execute only once
         public static void Initialize(TestContext testContext)
         {
-            var httpContextMock = new Mock<HttpContextBase>();
+            Helper.WipeTempFolder();
 
-            httpContextMock
-                .Setup(x => x.Server.MapPath(It.IsAny<string>()))
-                .Returns((string x) => Helper.MapPath(x));
-
-            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup", httpContextMock.Object);
-        }
-
-        #region Routing
-
-        [TestMethod]
-        [TestCategory("Startup_Routing")]
-        public void Routing_Html()
-        {
-            var httpContextMock = new Mock<HttpContextBase>();
-
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.HTML_EMBEDDED_RESOURCE_URL);
-
-            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
-
-            Assert.IsNotNull(routeData);
-            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
-            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.HTML_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup", Helper.GetMockHttpContext().Object);
         }
 
         [TestMethod]
-        [TestCategory("Startup_Routing")]
-        public void Routing_Jpg()
+        public void ExpectingSixResources()
         {
-            var httpContextMock = new Mock<HttpContextBase>();
+            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.JPG_EMBEDDED_RESOURCE_URL);
-
-            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
-
-            Assert.IsNotNull(routeData);
-            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
-            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.JPG_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.AreEqual(6, embeddedResourceItems.Count());
         }
 
         [TestMethod]
-        [TestCategory("Startup_Routing")]
-        public void Routing_Png()
+        public void ExpectingFiveServedResources()
         {
-            var httpContextMock = new Mock<HttpContextBase>();
+            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.PNG_EMBEDDED_RESOURCE_URL);
-
-            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
-
-            Assert.IsNotNull(routeData);
-            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
-            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.PNG_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.AreEqual(5, embeddedResourceItems.Where(x => !x.ExtractToFileSystem).Count());
         }
 
         [TestMethod]
-        [TestCategory("Startup_Routing")]
-        public void Routing_Txt()
+        public void ExpectingFourPublicServedResources()
         {
-            var httpContextMock = new Mock<HttpContextBase>();
+            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.TXT_EMBEDDED_RESOURCE_URL);
-
-            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
-
-            Assert.IsNotNull(routeData);
-            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
-            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.TXT_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.AreEqual(4, embeddedResourceItems.Where(x => !x.BackOfficeUserOnly && !x.ExtractToFileSystem).Count());
         }
 
         [TestMethod]
-        [TestCategory("Startup_Routing")]
-        public void Routing_Txt_BackOfficeUserOnly()
+        public void ExpectingOneProtectedServedResource()
         {
-            var httpContextMock = new Mock<HttpContextBase>();
+            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL);
-
-            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
-
-            Assert.IsNotNull(routeData);
-            Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
-            Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.TXT_BACK_OFFICE_USER_ONLY_EMBEDDED_RESOURCE_URL, routeData.Values["url"]);
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.AreEqual(1, embeddedResourceItems.Where(x => x.BackOfficeUserOnly).Count());
         }
 
         [TestMethod]
-        [TestCategory("Startup_Routing")]
-        public void Routing_Unknown()
+        public void ExpectingOneExtractionResource()
         {
-            var httpContextMock = new Mock<HttpContextBase>();
+            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
 
-            httpContextMock.Setup(x => x.Request.AppRelativeCurrentExecutionFilePath).Returns(Constants.UNKNOWN_EMBEDDED_RESOURCE_URL);
-
-            var routeData = RouteTable.Routes.GetRouteData(httpContextMock.Object);
-
-            Assert.IsNull(routeData);
+            Assert.IsNotNull(embeddedResourceItems);
+            Assert.AreEqual(1, embeddedResourceItems.Where(x => x.ExtractToFileSystem).Count());
         }
 
-        #endregion
-
-        #region Extraction
-
-
-        //[assembly: EmbeddedResourceExtract("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", Constants.HTML_EMBEDDED_RESOURCE_URL)]
         [TestMethod]
-        [TestCategory("Startup_Extraction")]
-        public void Extraction_Html()
+        public void HtmlResourceExtracted()
         {
-            Assert.IsTrue(File.Exists(Helper.MapPath(Constants.HTML_EMBEDDED_RESOURCE_URL)));
+            Assert.IsTrue(File.Exists(Helper.MapPath(Constants.HTML_RESOURCE_URL)));
         }
 
-        #endregion
     }
 }

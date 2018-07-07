@@ -1,10 +1,5 @@
-﻿using ClientDependency.Core;
-using Our.Umbraco.EmbeddedResource.ClientDependency;
-using Our.Umbraco.EmbeddedResource.Services;
-using System;
+﻿using Our.Umbraco.EmbeddedResource.Services;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using Umbraco.Core;
 
 namespace Our.Umbraco.EmbeddedResource.Events
@@ -14,13 +9,7 @@ namespace Our.Umbraco.EmbeddedResource.Events
         /// <summary>
         /// Ensure this event fires, even if Umbraco requires a new install or an upgrade
         /// </summary>
-        protected override bool ExecuteWhenApplicationNotConfigured
-        {
-            get
-            {
-                return true;
-            }
-        }
+        protected override bool ExecuteWhenApplicationNotConfigured => true;
 
         /// <summary>
         /// The Umbraco startup event handler
@@ -39,31 +28,7 @@ namespace Our.Umbraco.EmbeddedResource.Events
         /// </summary>
         private void Startup(HttpContextBase httpContext)
         {
-            foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
-            {
-                if (!embeddedResourceItem.ExtractToFileSystem)
-                {
-                    RouteTable
-                        .Routes
-                        .MapRoute(
-                            name: "EmbeddedResource" + Guid.NewGuid().ToString(),
-                            url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
-                            defaults: new
-                            {
-                                controller = "EmbeddedResource",
-                                action = "GetEmbeddedResource",
-                                url = embeddedResourceItem.ResourceUrl
-                            },
-                            namespaces: new[] { "Our.Umbraco.EmbeddedResource.Controllers" });
-
-                    // register with client depenedency
-                    FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
-                }
-                else // extract to file-system
-                {
-                    EmbeddedResourceService.ExtractToFileSystem(httpContext, embeddedResourceItem);
-                }
-            }
+            EmbeddedResourceService.RegisterResources(httpContext);
         }
     }
 }

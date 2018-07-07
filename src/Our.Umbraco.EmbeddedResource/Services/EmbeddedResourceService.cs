@@ -1,4 +1,6 @@
-﻿using Our.Umbraco.EmbeddedResource.Interfaces;
+﻿using ClientDependency.Core;
+using Our.Umbraco.EmbeddedResource.ClientDependency;
+using Our.Umbraco.EmbeddedResource.Interfaces;
 using Our.Umbraco.EmbeddedResource.Models;
 using System;
 using System.Collections.Generic;
@@ -6,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 
@@ -13,6 +17,36 @@ namespace Our.Umbraco.EmbeddedResource.Services
 {
     internal static class EmbeddedResourceService
     {
+        // this was previously in the startup event, but it didn't belong there
+        internal static void RegisterResources(HttpContextBase httpContext)
+        {
+            foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
+            {
+                if (!embeddedResourceItem.ExtractToFileSystem)
+                {
+                    RouteTable
+                        .Routes
+                        .MapRoute(
+                            name: "EmbeddedResource" + Guid.NewGuid().ToString(),
+                            url: embeddedResourceItem.ResourceUrl.TrimStart("~/"), // forward slash always expected
+                            defaults: new
+                            {
+                                controller = "EmbeddedResource",
+                                action = "GetEmbeddedResource",
+                                url = embeddedResourceItem.ResourceUrl
+                            },
+                            namespaces: new[] { "Our.Umbraco.EmbeddedResource.Controllers" });
+
+                    // register with client depenedency
+                    FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
+                }
+                else // extract to file-system
+                {
+                    EmbeddedResourceService.ExtractToFileSystem(httpContext, embeddedResourceItem);
+                }
+            }
+        }
+
         /// <summary>
         /// Builds an array of POCOs to represent the all consumer attributes found (excludes any conflicts - two different resources to the same file or url)
         /// </summary>
@@ -134,7 +168,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
 
                 if (File.Exists(path)) //should it overwrite ?
                 {
-                    LogHelper.Info(typeof(EmbeddedResourceService), $"Attempting to extract resource '{embeddedResourceItem.ResourceNamespace}', but file '{path}' already exists");
+                    LogHelper.Info(typeof(EmbeddedResourceService), $"Failed to extract resource '{embeddedResourceItem.ResourceNamespace}' to '{path}', as file already exists");
                 }
                 else
                 {
