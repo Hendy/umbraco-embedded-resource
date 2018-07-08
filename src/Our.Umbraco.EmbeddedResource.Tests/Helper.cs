@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Our.Umbraco.EmbeddedResource.Models;
 using Our.Umbraco.EmbeddedResource.Services;
+using System;
 using System.IO;
 using System.Web;
 
@@ -29,7 +30,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         /// <summary>
-        /// Gets a mock of the service that doesn't read in the assembly attributes, but are set for testing purposes
+        /// Gets a mock of the service using the default root path '~/' as context
         /// </summary>
         /// <returns></returns>
         internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(EmbeddedResourceItem[] embeddedResourceItems = null)
@@ -38,7 +39,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         /// <summary>
-        /// 
+        /// Gets a mock of the service using the supplied context
         /// </summary>
         /// <param name="httpContext"></param>
         /// <param name="embeddedResourceItems"></param>

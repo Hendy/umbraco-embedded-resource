@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.EmbeddedResource;
 using Our.Umbraco.EmbeddedResource.Events;
+using Our.Umbraco.EmbeddedResource.Services;
 using Our.Umbraco.EmbeddedResource.Tests;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Linq;
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html", Constants.HTML_RESOURCE_URL)]
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.jpg", Constants.JPG_RESOURCE_URL)]
 //[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", Constants.PNG_RESOURCE_URL)] // commented out so can test without tide prefix
-[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", "/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png")] // to test it registers without the tide prefix
+[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", "/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png")] // not using Constants.PNG_RESOURCE_URL, so as to test registration without the tilde prefix
 [assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt", Constants.TXT_RESOURCE_URL)]
 
 // Register a known resource on another url, and set to protected
@@ -38,17 +39,21 @@ using System.Linq;
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
     /// <summary>
-    /// Set of integration tests, each calls the startup event and checks for an expected final state
+    /// Integration tests, where each calls the startup event to initialize the assembly attribute registrations (see above) and then checks for an expected final state
     /// </summary>
     [TestClass]
     public class StartupTests
     {
+        private EmbeddedResourceService _embeddedResourceService;
+
         /// <summary>
         /// Wipe the temp folder then execute the startup before each test
         /// </summary>
         [TestInitialize]
         public void Initialize()
         {
+            this._embeddedResourceService = Helper.GetMockEmbeddedResourceService().Object;
+
             Helper.WipeTempFolder();
 
             new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup", Helper.GetMockHttpContext().Object);
@@ -57,7 +62,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingSixTotalResources()
         {
-            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = this._embeddedResourceService.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(6, embeddedResourceItems.Count());
@@ -66,7 +71,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingFiveServedResources()
         {
-            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = this._embeddedResourceService.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(5, embeddedResourceItems.Where(x => !x.ExtractToFileSystem).Count());
@@ -75,7 +80,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingFourPublicServedResources()
         {
-            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = this._embeddedResourceService.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(4, embeddedResourceItems.Where(x => !x.BackOfficeUserOnly && !x.ExtractToFileSystem).Count());
@@ -84,7 +89,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingOneProtectedServedResource()
         {
-            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = this._embeddedResourceService.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(1, embeddedResourceItems.Where(x => x.BackOfficeUserOnly).Count());
@@ -93,7 +98,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingOneExtractionResource()
         {
-            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = this._embeddedResourceService.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(1, embeddedResourceItems.Where(x => x.ExtractToFileSystem).Count());

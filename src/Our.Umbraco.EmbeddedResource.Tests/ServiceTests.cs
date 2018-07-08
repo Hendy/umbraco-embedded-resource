@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
@@ -9,25 +10,14 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     [TestClass]
     public class ServiceTests
     {
-        [TestMethod]
-        [TestCategory("Service_ExtractToFileSystem")]
-        public void ExtractToFileSystem_Html()
+        private EmbeddedResourceService _embeddedResourceService;
+
+        [TestInitialize]
+        public void Initialize()
         {
-            Helper.WipeTempFolder();
-
-            var path = Helper.MapPath(Constants.HTML_RESOURCE_URL);
-
-            Assert.IsNotNull(path);
-            Assert.IsFalse(File.Exists(path));
-
-            // trigger 
-            var mockService = Helper.GetMockEmbeddedResourceService();
-
-           
-
-
+            this._embeddedResourceService = Helper.GetMockEmbeddedResourceService().Object;
+            
         }
-
 
         #region ResourceExists
 
@@ -35,42 +25,42 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Html()
         {
-            Assert.IsTrue(Helper.GetMockEmbeddedResourceService().Object.ServedResourceExists(Constants.HTML_RESOURCE_URL));
+            Assert.IsTrue(this._embeddedResourceService.ServedResourceExists(Constants.HTML_RESOURCE_URL));
         }
 
         [TestMethod]
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Jpg()
         {
-            Assert.IsTrue(Helper.GetMockEmbeddedResourceService().Object.ServedResourceExists(Constants.JPG_RESOURCE_URL));
+            Assert.IsTrue(this._embeddedResourceService.ServedResourceExists(Constants.JPG_RESOURCE_URL));
         }
 
         [TestMethod]
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Png()
         {
-            Assert.IsTrue(Helper.GetMockEmbeddedResourceService().Object.ServedResourceExists(Constants.PNG_RESOURCE_URL));
+            Assert.IsTrue(this._embeddedResourceService.ServedResourceExists(Constants.PNG_RESOURCE_URL));
         }
 
         [TestMethod]
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Txt()
         {
-            Assert.IsTrue(Helper.GetMockEmbeddedResourceService().Object.ServedResourceExists(Constants.TXT_RESOURCE_URL));
+            Assert.IsTrue(this._embeddedResourceService.ServedResourceExists(Constants.TXT_RESOURCE_URL));
         }
 
         [TestMethod]
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Protected()
         {
-            Assert.IsTrue(Helper.GetMockEmbeddedResourceService().Object.ServedResourceExists(Constants.PROTECTED_RESOURCE_URL));
+            Assert.IsTrue(this._embeddedResourceService.ServedResourceExists(Constants.PROTECTED_RESOURCE_URL));
         }
 
         [TestMethod]
         [TestCategory("Service_ResourceExists")]
         public void ResourceExists_Unknown()
         {
-            Assert.IsFalse(Helper.GetMockEmbeddedResourceService().Object.ServedResourceExists(Constants.UNKNOWN_RESOURCE_URL));
+            Assert.IsFalse(this._embeddedResourceService.ServedResourceExists(Constants.UNKNOWN_RESOURCE_URL));
         }
 
         #endregion
@@ -81,7 +71,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Html()
         {
-            var html = Helper.GetMockEmbeddedResourceService().Object.GetServedResourceStream(Constants.HTML_RESOURCE_URL);
+            var html = this._embeddedResourceService.GetServedResourceStream(Constants.HTML_RESOURCE_URL);
 
             Assert.IsNotNull(html);
             Assert.IsInstanceOfType(html, typeof(Stream));
@@ -91,7 +81,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Jpg()
         {
-            var jpg = Helper.GetMockEmbeddedResourceService().Object.GetServedResourceStream(Constants.JPG_RESOURCE_URL);
+            var jpg = this._embeddedResourceService.GetServedResourceStream(Constants.JPG_RESOURCE_URL);
 
             Assert.IsNotNull(jpg);
             Assert.IsInstanceOfType(jpg, typeof(Stream));
@@ -101,7 +91,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Png()
         {
-            var png = Helper.GetMockEmbeddedResourceService().Object.GetServedResourceStream(Constants.PNG_RESOURCE_URL);
+            var png = this._embeddedResourceService.GetServedResourceStream(Constants.PNG_RESOURCE_URL);
 
             Assert.IsNotNull(png);
             Assert.IsInstanceOfType(png, typeof(Stream));
@@ -111,7 +101,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Txt()
         {
-            var txt = Helper.GetMockEmbeddedResourceService().Object.GetServedResourceStream(Constants.TXT_RESOURCE_URL);
+            var txt = this._embeddedResourceService.GetServedResourceStream(Constants.TXT_RESOURCE_URL);
 
             Assert.IsNotNull(txt);
             Assert.IsInstanceOfType(txt, typeof(Stream));
@@ -121,7 +111,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Protected()
         {
-            var txt = Helper.GetMockEmbeddedResourceService().Object.GetServedResourceStream(Constants.PROTECTED_RESOURCE_URL);
+            var txt = this._embeddedResourceService.GetServedResourceStream(Constants.PROTECTED_RESOURCE_URL);
 
             Assert.IsNotNull(txt);
             Assert.IsInstanceOfType(txt, typeof(Stream));
@@ -131,7 +121,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestCategory("Service_GetResourceStream")]
         public void GetResourceStream_Unknown()
         {
-            Assert.IsNull(Helper.GetMockEmbeddedResourceService().Object.GetServedResourceStream(Constants.UNKNOWN_RESOURCE_URL));
+            Assert.IsNull(this._embeddedResourceService.GetServedResourceStream(Constants.UNKNOWN_RESOURCE_URL));
         }
 
         #endregion
