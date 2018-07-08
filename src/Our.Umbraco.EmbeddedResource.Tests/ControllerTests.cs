@@ -12,7 +12,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var controller = new EmbeddedResourceController();
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.HTML_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Html.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
@@ -24,7 +24,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var controller = new EmbeddedResourceController();
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.JPG_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Jpg.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
@@ -36,7 +36,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var controller = new EmbeddedResourceController();
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.PNG_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Png.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
@@ -48,7 +48,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var controller = new EmbeddedResourceController();
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.TXT_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Txt.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
@@ -63,7 +63,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var controller = new EmbeddedResourceController();
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.PROTECTED_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Protected.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(HttpNotFoundResult));
@@ -81,11 +81,10 @@ namespace Our.Umbraco.EmbeddedResource.Tests
                 
             var controller = new EmbeddedResourceController(mockService.Object);
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.PROTECTED_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Protected.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(FileStreamResult));
-            Assert.AreEqual("text/plain", ((FileStreamResult)embeddedResource).ContentType);
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             var controller = new EmbeddedResourceController();
 
-            var embeddedResource = controller.GetEmbeddedResource(Constants.UNKNOWN_RESOURCE_URL);
+            var embeddedResource = controller.GetEmbeddedResource(Constants.Resources.Unknown.URL);
 
             Assert.IsNotNull(embeddedResource);
             Assert.IsInstanceOfType(embeddedResource, typeof(HttpNotFoundResult));

@@ -213,8 +213,6 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <returns></returns>
         internal Stream GetResourceStream(EmbeddedResourceItem embeddedResourceItem)
         {
-
-            var a = this.GetAllEmbeddedResourceItems();
             if (embeddedResourceItem != null)
             {
                 var assembly = EmbeddedResourceService
