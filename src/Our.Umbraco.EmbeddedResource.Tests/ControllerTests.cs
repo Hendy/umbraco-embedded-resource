@@ -55,6 +55,9 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.AreEqual("text/plain", ((FileStreamResult)embeddedResource).ContentType);
         }
 
+        /// <summary>
+        /// Attempt to get a protected resource as an anonymous user
+        /// </summary>
         [TestMethod]
         public void GetEmbeddedResource_Protected_NotLoggedIn()
         {
@@ -66,6 +69,9 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             Assert.IsInstanceOfType(embeddedResource, typeof(HttpNotFoundResult));
         }
 
+        /// <summary>
+        /// Get a protected resource as a logged in user
+        /// </summary>
         [TestMethod]
         public void GetEmbeddedResource_Protected_LoggedIn()
         {

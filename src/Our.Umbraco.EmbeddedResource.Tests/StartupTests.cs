@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.EmbeddedResource;
 using Our.Umbraco.EmbeddedResource.Events;
-using Our.Umbraco.EmbeddedResource.Services;
 using Our.Umbraco.EmbeddedResource.Tests;
 using System.IO;
 using System.Linq;
@@ -39,17 +38,16 @@ using System.Linq;
 namespace Our.Umbraco.EmbeddedResource.Tests
 {
     /// <summary>
-    /// Calls the startup event once (as Umbraco would do) which will register the assembly attributes (above)
+    /// Set of integration tests, each calls the startup event and checks for an expected final state
     /// </summary>
     [TestClass]
     public class StartupTests
     {
         /// <summary>
-        /// 
+        /// Wipe the temp folder then execute the startup before each test
         /// </summary>
-        /// <param name="testContext"></param>
-        [AssemblyInitialize] // Execute only once
-        public static void Initialize(TestContext testContext)
+        [TestInitialize]
+        public void Initialize()
         {
             Helper.WipeTempFolder();
 
@@ -59,7 +57,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingSixTotalResources()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(6, embeddedResourceItems.Count());
@@ -68,7 +66,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingFiveServedResources()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(5, embeddedResourceItems.Where(x => !x.ExtractToFileSystem).Count());
@@ -77,7 +75,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingFourPublicServedResources()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(4, embeddedResourceItems.Where(x => !x.BackOfficeUserOnly && !x.ExtractToFileSystem).Count());
@@ -86,7 +84,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingOneProtectedServedResource()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(1, embeddedResourceItems.Where(x => x.BackOfficeUserOnly).Count());
@@ -95,7 +93,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         [TestMethod]
         public void ExpectingOneExtractionResource()
         {
-            var embeddedResourceItems = EmbeddedResourceService.GetAllEmbeddedResourceItems();
+            var embeddedResourceItems = Helper.GetMockEmbeddedResourceService().Object.GetAllEmbeddedResourceItems();
 
             Assert.IsNotNull(embeddedResourceItems);
             Assert.AreEqual(1, embeddedResourceItems.Where(x => x.ExtractToFileSystem).Count());
@@ -106,6 +104,5 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         {
             Assert.IsTrue(File.Exists(Helper.MapPath(Constants.HTML_RESOURCE_URL)));
         }
-
     }
 }

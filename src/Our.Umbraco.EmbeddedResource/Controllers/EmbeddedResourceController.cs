@@ -12,13 +12,7 @@ namespace Our.Umbraco.EmbeddedResource.Controllers
     {
         private EmbeddedResourceService _embeddedResourceService; 
 
-        private EmbeddedResourceService EmbeddedResourceService
-        {
-            get
-            {
-                return _embeddedResourceService ?? new EmbeddedResourceService(this.HttpContext);
-            }
-        }
+        private EmbeddedResourceService EmbeddedResourceService => _embeddedResourceService ?? new EmbeddedResourceService(this.HttpContext);
 
         /// <summary>
         /// Production constructor
@@ -49,7 +43,7 @@ namespace Our.Umbraco.EmbeddedResource.Controllers
             {
                 if (!embeddedResourceItem.BackOfficeUserOnly || this.EmbeddedResourceService.IsBackOfficeUser())
                 {
-                    var resourceStream = EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
+                    var resourceStream = this.EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
 
                     if (resourceStream != null)
                     {

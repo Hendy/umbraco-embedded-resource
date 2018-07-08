@@ -28,7 +28,7 @@ namespace Our.Umbraco.EmbeddedResource.Events
         /// </summary>
         private void Startup(HttpContextBase httpContext)
         {
-            EmbeddedResourceService.RegisterResources(httpContext);
+            new EmbeddedResourceService(httpContext).RegisterResources();
         }
     }
 }

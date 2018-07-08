@@ -8,6 +8,17 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
     /// </summary>
     public sealed class EmbeddedResourceVirtualFileProvider : IVirtualFileProvider
     {
+        private EmbeddedResourceService _embeddedResourceService;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="embeddedResourceService"></param>
+        internal EmbeddedResourceVirtualFileProvider(EmbeddedResourceService embeddedResourceService)
+        {
+            this._embeddedResourceService = embeddedResourceService;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -15,7 +26,7 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         /// <returns></returns>
         public bool FileExists(string virtualFile)
         {
-            return new EmbeddedResourceService().ServedResourceExists(virtualFile);
+            return this._embeddedResourceService.ServedResourceExists(virtualFile);
         }
 
         /// <summary>
@@ -27,7 +38,7 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         {
             if (this.FileExists(virtualFile))
             {
-                return new EmbeddedResourceVirtualFile(virtualFile);
+                return new EmbeddedResourceVirtualFile(this._embeddedResourceService, virtualFile);
             }
 
             return null;

@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Our.Umbraco.EmbeddedResource.Models;
 using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 using System.Web;
@@ -31,30 +32,58 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         /// Gets a mock of the service that doesn't read in the assembly attributes, but are set for testing purposes
         /// </summary>
         /// <returns></returns>
-        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService()
+        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(EmbeddedResourceItem[] embeddedResourceItems = null)
         {
-            var embeddedResourceService = new Mock<EmbeddedResourceService>(Helper.GetMockHttpContext().Object);
+            return Helper.GetMockEmbeddedResourceService(Helper.GetMockHttpContext().Object, embeddedResourceItems);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <param name="embeddedResourceItems"></param>
+        /// <returns></returns>
+        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(HttpContextBase httpContext, EmbeddedResourceItem[] embeddedResourceItems = null)
+        {
+            var embeddedResourceService = new Mock<EmbeddedResourceService>(httpContext);
+
+            if (embeddedResourceItems != null)
+            {
+                embeddedResourceService
+                    .Setup(x => x.GetAllEmbeddedResourceItems())
+                    .Returns(embeddedResourceItems);
+            }
 
             return embeddedResourceService;
         }
 
         internal static void WipeTempFolder()
         {
-
+            Directory.Delete(Helper.GetTempFolder(), recursive: true);
         }
 
         /// <summary>
         /// Replacement method for HttpContext.Server.MapPath (so we can use a local temp directory without requiring a web server)
         /// </summary>
-        /// <param name="path"></param>
-        internal static string MapPath(string path)
+        /// <param name="url"></param>
+        internal static string MapPath(string url)
         {
-            var tempPath = Path.GetTempPath() + "Our.Umbraco.EmbeddedResource\\";
-
-            return path
-                    .Replace("~/", tempPath)
+            return url
+                    .Replace("~/", Helper.GetTempFolder())
                     .Replace("/", "\\");
         }
 
+        /// <summary>
+        /// Gets a temp folder ensuring it exists
+        /// </summary>
+        /// <returns>Returns the string path to the temp folder</returns>
+        private static string GetTempFolder()
+        {
+            var path = Path.GetTempPath() + "Our.Umbraco.EmbeddedResource\\";
+            
+            new FileInfo(path).Directory.Create(); // ensure folder exists
+
+            return path;
+        }
     }
 }

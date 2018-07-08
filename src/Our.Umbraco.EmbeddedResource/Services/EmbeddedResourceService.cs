@@ -20,6 +20,8 @@ namespace Our.Umbraco.EmbeddedResource.Services
     {
         private HttpContextBase _httpContext;
 
+        //private HttpContextBase HttpContext => _httpContext;
+
         /// <summary>
         /// 
         /// </summary>
@@ -33,12 +35,18 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// Look for all attributes and build the data-set
         /// </summary>
         /// <param name="httpContext"></param>
-        internal static void RegisterResources(HttpContextBase httpContext)
+        internal void RegisterResources()
         {
-            foreach (var embeddedResourceItem in EmbeddedResourceService.GetAllEmbeddedResourceItems())
+            //locking required here
+
+            foreach (var embeddedResourceItem in this.GetAllEmbeddedResourceItems())
             {
-                if (!embeddedResourceItem.ExtractToFileSystem)
+                if (embeddedResourceItem.ExtractToFileSystem)
                 {
+                    this.ExtractToFileSystem(embeddedResourceItem);
+                }
+                else
+                { 
                     RouteTable
                         .Routes
                         .MapRoute(
@@ -53,11 +61,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
                             namespaces: new[] { "Our.Umbraco.EmbeddedResource.Controllers" });
 
                     // register with client depenedency
-                    FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter());
-                }
-                else // extract to file-system
-                {
-                    EmbeddedResourceService.ExtractToFileSystem(httpContext, embeddedResourceItem);
+                    FileWriters.AddWriterForFile(embeddedResourceItem.ResourceUrl.TrimStart('~'), new EmbeddedResourceVirtualFileWriter(this));
                 }
             }
         }
@@ -66,7 +70,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// Builds an array of POCOs to represent the all consumer attributes found (excludes any conflicts - two different resources to the same file or url)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
-        internal static EmbeddedResourceItem[] GetAllEmbeddedResourceItems()
+        internal EmbeddedResourceItem[] GetAllEmbeddedResourceItems()
         {
             var embeddedResourceItems = new List<EmbeddedResourceItem>();
 
@@ -137,10 +141,10 @@ namespace Our.Umbraco.EmbeddedResource.Services
 
             if (url != null)
             {
-                return EmbeddedResourceService
-                            .GetAllEmbeddedResourceItems()
-                            .Where(x => !x.ExtractToFileSystem)
-                            .SingleOrDefault(x => x.ResourceUrl == url);
+                return this
+                        .GetAllEmbeddedResourceItems()
+                        .Where(x => !x.ExtractToFileSystem)
+                        .SingleOrDefault(x => x.ResourceUrl == url);
             }
 
             return null;
@@ -163,15 +167,14 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <returns>a stream or null</returns>
         internal Stream GetServedResourceStream(string url)
         {
-            return EmbeddedResourceService.GetResourceStream(this.GetServedEmbeddedResourceItem(url));
+            return this.GetResourceStream(this.GetServedEmbeddedResourceItem(url));
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="httpContext">injected for unit testing</param>
         /// <param name="embeddedResourceItem">the details of the resource to extract</param>
-        internal static void ExtractToFileSystem(HttpContextBase httpContext, EmbeddedResourceItem embeddedResourceItem)
+        internal void ExtractToFileSystem(EmbeddedResourceItem embeddedResourceItem)
         {
             if (!embeddedResourceItem.ExtractToFileSystem)
             {
@@ -179,7 +182,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
             }
             else
             {
-                var path = httpContext.Server.MapPath(embeddedResourceItem.ResourceUrl);
+                var path = this._httpContext.Server.MapPath(embeddedResourceItem.ResourceUrl);
 
                 if (File.Exists(path)) //should it overwrite ?
                 {
@@ -187,7 +190,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
                 }
                 else
                 {
-                    var resourceStream = EmbeddedResourceService.GetResourceStream(embeddedResourceItem);
+                    var resourceStream = this.GetResourceStream(embeddedResourceItem);
 
                     if (resourceStream != null)
                     {
@@ -208,8 +211,10 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// </summary>
         /// <param name="embeddedResourceItem"></param>
         /// <returns></returns>
-        internal static Stream GetResourceStream(EmbeddedResourceItem embeddedResourceItem)
+        internal Stream GetResourceStream(EmbeddedResourceItem embeddedResourceItem)
         {
+
+            var a = this.GetAllEmbeddedResourceItems();
             if (embeddedResourceItem != null)
             {
                 var assembly = EmbeddedResourceService
@@ -269,6 +274,8 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <returns></returns>
         private static string EnsureUrlAppRelative(string url)
         {            
+
+
             if (HttpContext.Current != null) // if outside of the unit test context
             {
                 if (!VirtualPathUtility.IsAppRelative(url))

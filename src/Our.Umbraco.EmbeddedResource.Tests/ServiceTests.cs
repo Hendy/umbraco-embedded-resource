@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
@@ -10,6 +9,25 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     [TestClass]
     public class ServiceTests
     {
+        [TestMethod]
+        [TestCategory("Service_ExtractToFileSystem")]
+        public void ExtractToFileSystem_Html()
+        {
+            Helper.WipeTempFolder();
+
+            var path = Helper.MapPath(Constants.HTML_RESOURCE_URL);
+
+            Assert.IsNotNull(path);
+            Assert.IsFalse(File.Exists(path));
+
+            // trigger 
+            var mockService = Helper.GetMockEmbeddedResourceService();
+
+           
+
+
+        }
+
 
         #region ResourceExists
 

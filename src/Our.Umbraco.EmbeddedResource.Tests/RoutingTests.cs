@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Our.Umbraco.EmbeddedResource.Events;
 using System.Web.Routing;
 
 namespace Our.Umbraco.EmbeddedResource.Tests
@@ -9,6 +10,12 @@ namespace Our.Umbraco.EmbeddedResource.Tests
     [TestClass]
     public class RoutingTests
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            new PrivateObject(new EmbeddedResourceStartup()).Invoke("Startup", Helper.GetMockHttpContext().Object);
+        }
+
         [TestMethod]
         public void Routing_Html()
         {           
