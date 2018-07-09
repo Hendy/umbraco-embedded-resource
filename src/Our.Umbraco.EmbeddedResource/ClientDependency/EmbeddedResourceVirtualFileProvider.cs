@@ -11,7 +11,7 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         private EmbeddedResourceService _embeddedResourceService;
 
         /// <summary>
-        /// 
+        /// Constructor to inject service
         /// </summary>
         /// <param name="embeddedResourceService"></param>
         internal EmbeddedResourceVirtualFileProvider(EmbeddedResourceService embeddedResourceService)

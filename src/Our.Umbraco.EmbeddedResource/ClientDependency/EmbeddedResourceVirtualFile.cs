@@ -25,6 +25,11 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         }
 
         /// <summary>
+        /// Gets the path.
+        /// </summary>
+        public string Path { get; }
+
+        /// <summary>
         /// When overridden in a derived class, returns a read-only stream to the virtual resource.
         /// </summary>
         /// <returns>
@@ -34,10 +39,5 @@ namespace Our.Umbraco.EmbeddedResource.ClientDependency
         {
             return this._embeddedResourceService.GetServedResourceStream(this.Path);
         }
-
-        /// <summary>
-        /// Gets the path.
-        /// </summary>
-        public string Path { get; }
     }
 }

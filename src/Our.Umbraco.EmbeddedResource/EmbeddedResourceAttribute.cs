@@ -12,16 +12,16 @@ namespace Our.Umbraco.EmbeddedResource
         /// <summary>
         /// The full namespace of the embedded resource file to register - eg. "MyProject.Folder.ExampleResource.html"
         /// </summary>
-        private string ResourceNamespace;
+        private string _resourceNamespace;
 
         /// <summary>
         /// The app relative url on which the resource file should be served - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"
         /// </summary>
-        private string ResourceUrl;
+        private string _resourceUrl;
 
-        string IEmbeddedResourceAttribute.ResourceNamespace => this.ResourceNamespace;
+        string IEmbeddedResourceAttribute.ResourceNamespace => this._resourceNamespace;
 
-        string IEmbeddedResourceAttribute.ResourceUrl => this.ResourceUrl;
+        string IEmbeddedResourceAttribute.ResourceUrl => this._resourceUrl;
 
         /// <summary>
         /// Register an embedded resource in this assembly so it can be served over http(s).
@@ -30,8 +30,8 @@ namespace Our.Umbraco.EmbeddedResource
         /// <param name="resourceUrl">The app relative url on which the resource file should be served - eg. "~/AppPlugins/MyProject/Folder/ExampleResource.html"</param>
         public EmbeddedResourceAttribute(string resourceNamespace, string resourceUrl)
         {
-            this.ResourceNamespace = resourceNamespace;
-            this.ResourceUrl = resourceUrl;
+            this._resourceNamespace = resourceNamespace;
+            this._resourceUrl = resourceUrl;
         }
     }
 }
