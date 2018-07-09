@@ -1,15 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Our.Umbraco.EmbeddedResource.Events;
 using Our.Umbraco.EmbeddedResource.Services;
 using System.Web.Routing;
 
-namespace Our.Umbraco.EmbeddedResource.Tests
+namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
 {
     /// <summary>
     /// Checks all consumer assembly attributes were found and registered correctly
     /// </summary>
     [TestClass]
-    public class RoutingTests
+    [TestCategory("Integration")]
+    public class RoutingIntegrationTests
     {
         [TestInitialize]
         public void Initialize()

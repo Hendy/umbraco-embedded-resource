@@ -2,13 +2,14 @@
 using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 
-namespace Our.Umbraco.EmbeddedResource.Tests
+namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
 {
     /// <summary>
     /// see: Our.Umbraco.EmbeddedResource.Properties.AssemblyInfo.cs for the assembly attributes that define how the test resrouces are registered.
     /// </summary>
     [TestClass]
-    public class ServiceTests
+    [TestCategory("Integration")]
+    public class ServiceIntegrationTests
     {
         private EmbeddedResourceService _embeddedResourceService;
 

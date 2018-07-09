@@ -12,11 +12,25 @@
         /// </summary>
         internal static class Resources
         {
+            internal static class Txt
+            {
+                internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt";
+
+                internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.txt";
+            }
+
             internal static class Html
             {
                 internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html";
 
                 internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.html";
+            }
+
+            internal static class Js
+            {
+                internal const string NAMEPSPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.js";
+
+                internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.js";
             }
 
             internal static class Jpg
@@ -31,13 +45,6 @@
                 internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png";
 
                 internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png";
-            }
-
-            internal static class Txt
-            {
-                internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt";
-
-                internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.txt";
             }
 
             /// <summary>

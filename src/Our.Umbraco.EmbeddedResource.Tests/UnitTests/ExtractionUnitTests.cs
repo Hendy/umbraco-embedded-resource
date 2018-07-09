@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
-namespace Our.Umbraco.EmbeddedResource.Tests
+namespace Our.Umbraco.EmbeddedResource.Tests.UnitTests
 {
     [TestClass]
-    public class ExtractionTests
+    public class ExtractionUnitTests
     {
         /// <summary>
         /// 

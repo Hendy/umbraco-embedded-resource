@@ -2,10 +2,11 @@
 using Our.Umbraco.EmbeddedResource.Controllers;
 using System.Web.Mvc;
 
-namespace Our.Umbraco.EmbeddedResource.Tests
+namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
 {
     [TestClass]
-    public class ControllerTests
+    [TestCategory("Integration")]
+    public class ControllerIntegrationTests
     {
         [TestMethod]
         public void GetEmbeddedResource_Html()

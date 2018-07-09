@@ -197,13 +197,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="ControllerTests.cs" />
-    <Compile Include="ExtractionTests.cs" />
+    <Compile Include="IntegrationTests\ControllerIntegrationTests.cs" />
+    <Compile Include="UnitTests\ExtractionUnitTests.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="RoutingTests.cs" />
-    <Compile Include="ServiceTests.cs" />
+    <Compile Include="IntegrationTests\RoutingIntegrationTests.cs" />
+    <Compile Include="IntegrationTests\ServiceIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartupTests.cs" />
+    <Compile Include="IntegrationTests\StartupIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -225,6 +225,7 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\EmbeddedResource.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
