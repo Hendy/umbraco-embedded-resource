@@ -70,7 +70,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// Builds an array of POCOs to represent the all consumer attributes found (excludes any conflicts - two different resources to the same file or url)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
-        internal EmbeddedResourceItem[] GetAllEmbeddedResourceItems()
+        internal virtual EmbeddedResourceItem[] GetAllEmbeddedResourceItems() // TODO: pull out the attrubute parsing logic
         {
             var embeddedResourceItems = new List<EmbeddedResourceItem>();
 

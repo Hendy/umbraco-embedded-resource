@@ -1,7 +1,6 @@
 ﻿using Moq;
 using Our.Umbraco.EmbeddedResource.Models;
 using Our.Umbraco.EmbeddedResource.Services;
-using System;
 using System.IO;
 using System.Web;
 
@@ -30,32 +29,25 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         }
 
         /// <summary>
-        /// Gets a mock of the service using the default root path '~/' as context
+        /// Get a mock of the service using the default root path '~/' as context
         /// </summary>
         /// <returns></returns>
-        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(EmbeddedResourceItem[] embeddedResourceItems = null)
+        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(string url = "~/")
         {
-            return Helper.GetMockEmbeddedResourceService(Helper.GetMockHttpContext().Object, embeddedResourceItems);
+            return Helper.GetMockEmbeddedResourceService(Helper.GetMockHttpContext(url).Object);
         }
 
         /// <summary>
-        /// Gets a mock of the service using the supplied context
+        /// Get a mock of the service using the supplied context
         /// </summary>
         /// <param name="httpContext"></param>
-        /// <param name="embeddedResourceItems"></param>
         /// <returns></returns>
-        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(HttpContextBase httpContext, EmbeddedResourceItem[] embeddedResourceItems = null)
+        internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(HttpContextBase httpContext)
         {
-            var embeddedResourceService = new Mock<EmbeddedResourceService>(httpContext);
-
-            if (embeddedResourceItems != null)
+            return new Mock<EmbeddedResourceService>(httpContext)
             {
-                embeddedResourceService
-                    .Setup(x => x.GetAllEmbeddedResourceItems())
-                    .Returns(embeddedResourceItems);
-            }
-
-            return embeddedResourceService;
+                CallBase = true // the GetAllEmbeddedResourceItems has been marked as virtual
+            };
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 
 // Invalid registrations ----------------------------------------
 
-// Attempt to register duplicates - ignored as attribute definitions are identical
+// Attempt to register duplicates by url  (using identical duplicates, as require valid ones, but can't guantuee ordering of attributes without specification)
 [assembly: EmbeddedResource(Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL)]
 [assembly: EmbeddedResource(Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL)]
 
@@ -50,3 +50,5 @@ using System.Runtime.InteropServices;
 // Attempt to register an invalid resource with an invalid url
 [assembly: EmbeddedResource(Constants.TestResources.Unknown.NAMESPACE, "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
 
+// Attempt to register duplicate by file path (using identical duplicate, as require valid one, but can't guantuee ordering of attributes without specification)
+[assembly: EmbeddedResourceExtract(Constants.TestResources.Html.NAMESPACE, Constants.TestResources.Html.URL)]

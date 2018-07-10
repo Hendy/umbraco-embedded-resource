@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.EmbeddedResource.Controllers;
+using System;
 using System.Web.Mvc;
 
 namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
@@ -63,6 +64,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
         /// Attempt to get a protected resource as an anonymous user
         /// </summary>
         [TestMethod]
+        [Obsolete]
         public void GetEmbeddedResource_Protected_NotLoggedIn()
         {
             var controller = new EmbeddedResourceController();
@@ -77,6 +79,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
         /// Get a protected resource as a logged in user
         /// </summary>
         [TestMethod]
+        [Obsolete]
         public void GetEmbeddedResource_Protected_LoggedIn()
         {
             var mockService = Helper.GetMockEmbeddedResourceService();

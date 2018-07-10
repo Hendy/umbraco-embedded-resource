@@ -198,6 +198,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="IntegrationTests\ControllerIntegrationTests.cs" />
+    <Compile Include="UnitTests\ControllerUnitTests.cs" />
     <Compile Include="UnitTests\ExtractionUnitTests.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IntegrationTests\RoutingIntegrationTests.cs" />
