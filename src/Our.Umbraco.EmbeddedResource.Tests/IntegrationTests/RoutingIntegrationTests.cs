@@ -5,7 +5,7 @@ using System.Web.Routing;
 namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
 {
     /// <summary>
-    /// Checks all consumer assembly attributes were found and registered correctly
+    /// All tests use the assembly attributes in Properties.AssemblyInfo.cs as their data-source (emulating consumer api)
     /// </summary>
     [TestClass]
     [TestCategory("Integration")]
@@ -24,62 +24,62 @@ namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
         [TestMethod]
         public void Routing_Html()
         {           
-            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.Resources.Html.URL).Object);
+            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.TestResources.Html.URL).Object);
 
             Assert.IsNotNull(routeData);
             Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
             Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.Resources.Html.URL, routeData.Values["url"]);
+            Assert.AreEqual(Constants.TestResources.Html.URL, routeData.Values["url"]);
         }
 
         [TestMethod]
         public void Routing_Jpg()
         {
-            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.Resources.Jpg.URL).Object);
+            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.TestResources.Jpg.URL).Object);
 
             Assert.IsNotNull(routeData);
             Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
             Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.Resources.Jpg.URL, routeData.Values["url"]);
+            Assert.AreEqual(Constants.TestResources.Jpg.URL, routeData.Values["url"]);
         }
 
         [TestMethod]
         public void Routing_Png()
         {
-            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.Resources.Png.URL).Object);
+            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.TestResources.Png.URL).Object);
 
             Assert.IsNotNull(routeData);
             Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
             Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.Resources.Png.URL, routeData.Values["url"]);
+            Assert.AreEqual(Constants.TestResources.Png.URL, routeData.Values["url"]);
         }
 
         [TestMethod]
         public void Routing_Txt()
         {
-            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.Resources.Txt.URL).Object);
+            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.TestResources.Txt.URL).Object);
 
             Assert.IsNotNull(routeData);
             Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
             Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.Resources.Txt.URL, routeData.Values["url"]);
+            Assert.AreEqual(Constants.TestResources.Txt.URL, routeData.Values["url"]);
         }
 
         [TestMethod]
         public void Routing_Protected()
         {
-            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.Resources.Protected.URL).Object);
+            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.TestResources.Protected.URL).Object);
 
             Assert.IsNotNull(routeData);
             Assert.AreEqual("EmbeddedResource", routeData.Values["controller"]);
             Assert.AreEqual("GetEmbeddedResource", routeData.Values["action"]);
-            Assert.AreEqual(Constants.Resources.Protected.URL, routeData.Values["url"]);
+            Assert.AreEqual(Constants.TestResources.Protected.URL, routeData.Values["url"]);
         }
 
         [TestMethod]
         public void Routing_Unknown()
         {
-            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.Resources.Unknown.URL).Object);
+            var routeData = RouteTable.Routes.GetRouteData(Helper.GetMockHttpContext(Constants.TestResources.Unknown.URL).Object);
 
             Assert.IsNull(routeData);
         }

@@ -58,6 +58,27 @@ namespace Our.Umbraco.EmbeddedResource.Tests
             return embeddedResourceService;
         }
 
+        /// <summary>
+        /// Builds a POCO model to represent a single embedded resource registation (would normally be built from parsing a consumer assembly attribute)
+        /// </summary>
+        /// <param name="embeddedResourceType">specifying the type enables the correct namespace & url parameters to be used</param>
+        /// <param name="backOfficeOnly">when true, this resource is only availble to authenticated Umbraco users</param>
+        /// <param name="extractToFileSystem">when true, this resource indicates it should be extracted to the file-system</param>
+        /// <returns></returns>
+        internal static EmbeddedResourceItem GetEmbeddedResourceItem(Constants.TestResourceType embeddedResourceType, bool backOfficeOnly = false, bool extractToFileSystem = false)
+        {
+            switch (embeddedResourceType)
+            {
+                case Constants.TestResourceType.Html: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Html.NAMESPACE, Constants.TestResources.Html.URL, backOfficeOnly, extractToFileSystem);
+                case Constants.TestResourceType.Jpg: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL, backOfficeOnly, extractToFileSystem);
+                case Constants.TestResourceType.Png: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Png.NAMESPACE, Constants.TestResources.Png.URL, backOfficeOnly, extractToFileSystem);
+                case Constants.TestResourceType.Txt: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Txt.NAMESPACE, Constants.TestResources.Txt.URL, backOfficeOnly, extractToFileSystem);
+
+                default:
+                    return null;
+            }
+        }
+
         internal static void WipeTempFolder()
         {
             Directory.Delete(Helper.GetTempFolder(), recursive: true);

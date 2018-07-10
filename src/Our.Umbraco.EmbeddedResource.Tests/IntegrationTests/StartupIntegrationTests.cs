@@ -7,7 +7,7 @@ using System.Linq;
 namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
 {
     /// <summary>
-    /// Integration tests, where each calls the startup event to initialize the assembly attribute registrations (see above) and then checks for an expected final state
+    /// All tests use the assembly attributes in Properties.AssemblyInfo.cs as their data-source (emulating consumer api)
     /// </summary>
     [TestClass]
     [TestCategory("Integration")]
@@ -76,7 +76,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests.IntegrationTests
         [TestMethod]
         public void HtmlResourceExtracted()
         {
-            Assert.IsTrue(File.Exists(Helper.MapPath(Constants.Resources.Html.URL)));
+            Assert.IsTrue(File.Exists(Helper.MapPath(Constants.TestResources.Html.URL)));
         }
     }
 }

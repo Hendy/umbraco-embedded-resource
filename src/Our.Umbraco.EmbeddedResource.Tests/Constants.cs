@@ -8,29 +8,29 @@
         internal const string TEST_ASSEMBLY_FULL_NAME = "Our.Umbraco.EmbeddedResource.Tests, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null";
 
         /// <summary>
+        /// Used by the test helper to build an <see cref="EmbeddedResource.Models.EmbeddedResourceItem"/> object using the constants here
+        /// </summary>
+        internal enum TestResourceType
+        {
+            Html,
+            Jpg,
+            //Js,
+            Png,
+            Txt,
+            Protected,
+            Unknown
+        }
+
+        /// <summary>
         /// string values for namespace and url of the embedded test resources
         /// </summary>
-        internal static class Resources
+        internal static class TestResources
         {
-            internal static class Txt
-            {
-                internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt";
-
-                internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.txt";
-            }
-
             internal static class Html
             {
                 internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.html";
 
                 internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.html";
-            }
-
-            internal static class Js
-            {
-                internal const string NAMEPSPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.js";
-
-                internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.js";
             }
 
             internal static class Jpg
@@ -40,11 +40,25 @@
                 internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.jpg";
             }
 
+            //internal static class Js
+            //{
+            //    internal const string NAMEPSPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.js";
+
+            //    internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.js";
+            //}
+
             internal static class Png
             {
                 internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png";
 
                 internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png";
+            }
+
+            internal static class Txt
+            {
+                internal const string NAMESPACE = "Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.txt";
+
+                internal const string URL = "~/App_Plugins/EmbeddedResourceTests/EmbeddedResource.txt";
             }
 
             /// <summary>

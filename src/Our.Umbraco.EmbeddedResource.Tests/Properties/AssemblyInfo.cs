@@ -19,32 +19,34 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.3.0.0")]
 [assembly: AssemblyFileVersion("0.3.0.0")]
 
+// The following are registrations for the integration testing
+
 // Valid registrations ----------------------------------------
 
-[assembly: EmbeddedResource(Constants.Resources.Html.NAMESPACE, Constants.Resources.Html.URL)]
-[assembly: EmbeddedResource(Constants.Resources.Jpg.NAMESPACE, Constants.Resources.Jpg.URL)]
+[assembly: EmbeddedResource(Constants.TestResources.Html.NAMESPACE, Constants.TestResources.Html.URL)]
+[assembly: EmbeddedResource(Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL)]
 //[assembly: EmbeddedResource("Our.Umbraco.EmbeddedResource.Tests.EmbeddedResources.EmbeddedResource.png", Constants.Resources.Png.URL)] // commented out so can test without tide prefix
-[assembly: EmbeddedResource(Constants.Resources.Png.NAMESPACE, "/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png")] // not using Constants.Resources.Png.URL, so as to test registration without the tilde prefix
-[assembly: EmbeddedResource(Constants.Resources.Txt.NAMESPACE, Constants.Resources.Txt.URL)]
+[assembly: EmbeddedResource(Constants.TestResources.Png.NAMESPACE, "/App_Plugins/EmbeddedResourceTests/EmbeddedResource.png")] // not using Constants.Resources.Png.URL, so as to test registration without the tilde prefix
+[assembly: EmbeddedResource(Constants.TestResources.Txt.NAMESPACE, Constants.TestResources.Txt.URL)]
 
 // Register a known resource on another url, and set to protected
-[assembly: EmbeddedResourceProtected(Constants.Resources.Txt.NAMESPACE, Constants.Resources.Protected.URL)]
+[assembly: EmbeddedResourceProtected(Constants.TestResources.Txt.NAMESPACE, Constants.TestResources.Protected.URL)]
 
 // Register a known resource to be extracted onto file-system
-[assembly: EmbeddedResourceExtract(Constants.Resources.Html.NAMESPACE, Constants.Resources.Html.URL)]
+[assembly: EmbeddedResourceExtract(Constants.TestResources.Html.NAMESPACE, Constants.TestResources.Html.URL)]
 
 // Invalid registrations ----------------------------------------
 
 // Attempt to register duplicates - ignored as attribute definitions are identical
-[assembly: EmbeddedResource(Constants.Resources.Jpg.NAMESPACE, Constants.Resources.Jpg.URL)]
-[assembly: EmbeddedResource(Constants.Resources.Jpg.NAMESPACE, Constants.Resources.Jpg.URL)]
+[assembly: EmbeddedResource(Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL)]
+[assembly: EmbeddedResource(Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL)]
 
 // Attempt to register an invalid resource with a valid url
-[assembly: EmbeddedResource(Constants.Resources.Unknown.NAMESPACE, Constants.Resources.Unknown.URL)]
+[assembly: EmbeddedResource(Constants.TestResources.Unknown.NAMESPACE, Constants.TestResources.Unknown.URL)]
 
 // Attempt to register a valid resource with an invalid url
-[assembly: EmbeddedResource(Constants.Resources.Html.NAMESPACE, "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+[assembly: EmbeddedResource(Constants.TestResources.Html.NAMESPACE, "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
 
 // Attempt to register an invalid resource with an invalid url
-[assembly: EmbeddedResource(Constants.Resources.Unknown.NAMESPACE, "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
+[assembly: EmbeddedResource(Constants.TestResources.Unknown.NAMESPACE, "http://mysite.com/App_Plugins/EmbeddedResourceTests/ExampleResource.html")]
 

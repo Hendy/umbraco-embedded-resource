@@ -1,11 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Our.Umbraco.EmbeddedResource.Services;
 using System.IO;
 
 namespace Our.Umbraco.EmbeddedResource.Tests.UnitTests
 {
     [TestClass]
+    [TestCategory("Unit")]
     public class ExtractionUnitTests
     {
+        private EmbeddedResourceService _embeddedResourceService;
+
         /// <summary>
         /// 
         /// </summary>
@@ -13,28 +17,39 @@ namespace Our.Umbraco.EmbeddedResource.Tests.UnitTests
         public void Initialize()
         {
             Helper.WipeTempFolder();
+
+            this._embeddedResourceService = Helper.GetMockEmbeddedResourceService().Object;
         }
 
         [TestMethod]
         public void Extract_Html()
         {
-            var resourceItem = new Models.EmbeddedResourceItem(
-                                            Constants.TEST_ASSEMBLY_FULL_NAME, 
-                                            Constants.Resources.Html.NAMESPACE, 
-                                            Constants.Resources.Html.URL, 
-                                            false, 
-                                            true);
+            var resourceItem = Helper.GetEmbeddedResourceItem(Constants.TestResourceType.Html, false, true);
 
             var path = Helper.MapPath(resourceItem.ResourceUrl);
 
             Assert.IsNotNull(path);
             Assert.IsFalse(File.Exists(path));
 
-            var mockService = Helper.GetMockEmbeddedResourceService().Object;
-
-            mockService.ExtractToFileSystem(resourceItem);
+            this._embeddedResourceService.ExtractToFileSystem(resourceItem);
 
             Assert.IsTrue(File.Exists(path));
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [TestMethod]
+        public void Extract_Jpg()
+        {
+            //var resourceItem = Helper.GetEmbeddedResourceItem()
+        }
+
+        //private void Extract()
+        //{
+        //    Assert.Fail();
+        //}
+
     }
 }
