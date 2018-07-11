@@ -65,6 +65,8 @@ namespace Our.Umbraco.EmbeddedResource.Tests
                 case Constants.TestResourceType.Jpg: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Jpg.NAMESPACE, Constants.TestResources.Jpg.URL, backOfficeOnly, extractToFileSystem);
                 case Constants.TestResourceType.Png: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Png.NAMESPACE, Constants.TestResources.Png.URL, backOfficeOnly, extractToFileSystem);
                 case Constants.TestResourceType.Txt: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Txt.NAMESPACE, Constants.TestResources.Txt.URL, backOfficeOnly, extractToFileSystem);
+                case Constants.TestResourceType.Protected: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Protected.NAMESPACE, Constants.TestResources.Protected.URL, backOfficeOnly, extractToFileSystem);
+                case Constants.TestResourceType.Unknown: return new EmbeddedResourceItem(Constants.TEST_ASSEMBLY_FULL_NAME, Constants.TestResources.Unknown.NAMESPACE, Constants.TestResources.Unknown.URL, backOfficeOnly, extractToFileSystem);
 
                 default:
                     return null;

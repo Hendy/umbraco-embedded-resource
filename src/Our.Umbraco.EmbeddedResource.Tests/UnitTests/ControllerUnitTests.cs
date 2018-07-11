@@ -28,7 +28,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests.UnitTests
 
             mockService.Setup(x => x.IsBackOfficeUser()).Returns(true);
 
-           // mockService.Setup(x => x.GetAllEmbeddedResourceItems()).Returns(new[] { Helper.GetEmbeddedResourceItem(Constants.TestResourceType.Protected) });
+            mockService.Setup(x => x.GetAllEmbeddedResourceItems()).Returns(new[] { Helper.GetEmbeddedResourceItem(Constants.TestResourceType.Protected) });
 
             var controller = new EmbeddedResourceController(mockService.Object);
 
