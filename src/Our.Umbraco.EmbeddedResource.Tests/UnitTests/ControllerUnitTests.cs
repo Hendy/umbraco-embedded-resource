@@ -39,7 +39,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests.UnitTests
         }
 
         /// <summary>
-        /// Attempt to get a protected resource as an anonymous user
+        /// Attempt to get a protected resource as an anonymous user - a 404 error should be returned
         /// </summary>
         [TestMethod]
         public void GetEmbeddedResource_Protected_NotLoggedIn()

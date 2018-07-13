@@ -20,10 +20,8 @@ namespace Our.Umbraco.EmbeddedResource.Services
     {
         private HttpContextBase _httpContext;
 
-        //private HttpContextBase HttpContext => _httpContext;
-
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
         /// <param name="httpContext"></param>
         internal EmbeddedResourceService(HttpContextBase httpContext = null)
