@@ -44,10 +44,7 @@ namespace Our.Umbraco.EmbeddedResource.Tests
         /// <returns></returns>
         internal static Mock<EmbeddedResourceService> GetMockEmbeddedResourceService(HttpContextBase httpContext)
         {
-            return new Mock<EmbeddedResourceService>(httpContext)
-            {
-                CallBase = true // the GetAllEmbeddedResourceItems has been marked as virtual
-            };
+            return new Mock<EmbeddedResourceService>(httpContext) { CallBase = true }; // the GetAllEmbeddedResourceItems has been marked as virtual
         }
 
         /// <summary>

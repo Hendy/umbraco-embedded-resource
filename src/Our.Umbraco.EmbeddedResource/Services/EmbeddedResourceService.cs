@@ -72,60 +72,69 @@ namespace Our.Umbraco.EmbeddedResource.Services
         {
             var embeddedResourceItems = new List<EmbeddedResourceItem>();
 
-            // TODO: add caching, as called at least twice at the moment
-
-            foreach (var assembly in EmbeddedResourceService.GetAssemblies())
+            foreach (var attribute in this.GetCustomAttributes())
             {
-                var attributes = ((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceAttribute>())
-                                .Union((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceProtectedAttribute>())
-                                .Union((IEmbeddedResourceAttribute[])assembly.GetCustomAttributes<EmbeddedResourceExtractAttribute>());
+                var assembly = EmbeddedResourceService.GetAssemblies().Single(x => x.FullName == attribute.AssemblyFullName);
 
-                foreach (var attribute in attributes)
-                {                    
-                    if (!assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
-                    {
-                        LogHelper.Warn(typeof(EmbeddedResourceService), $"Embedded Resource: '{ attribute.ResourceNamespace }', not found in Assembly: '{ assembly.FullName }'");
+                if (!assembly.GetManifestResourceNames().Any(x => x == attribute.ResourceNamespace))
+                {
+                    LogHelper.Warn(typeof(EmbeddedResourceService), $"Embedded Resource: '{ attribute.ResourceNamespace }', not found in Assembly: '{ assembly.FullName }'");
+                }
+                else
+                {
+                    var url = EmbeddedResourceService.EnsureUrlAppRelative(attribute.ResourceUrl);
+
+                    if (url == null)
+                    { 
+                        LogHelper.Warn(typeof(EmbeddedResourceService), $"Invalid Relative Url: '{ attribute.ResourceUrl }'");
                     }
                     else
                     {
-                        var url = EmbeddedResourceService.EnsureUrlAppRelative(attribute.ResourceUrl);
+                        var backOfficeUserOnly = attribute is EmbeddedResourceProtectedAttribute;
+                        var extractToFileSystem = attribute is EmbeddedResourceExtractAttribute;
 
-                        if (url == null)
-                        { 
-                            LogHelper.Warn(typeof(EmbeddedResourceService), $"Invalid Relative Url: '{ attribute.ResourceUrl }'");
-                        }
-                        else
+                        // check this doesn't conflict with any already added
+                        var conflict = embeddedResourceItems
+                                        .SingleOrDefault(x => x.ExtractToFileSystem == extractToFileSystem && x.ResourceUrl == url);
+
+                        if (conflict != null) 
                         {
-                            var backOfficeUserOnly = attribute is EmbeddedResourceProtectedAttribute;
-                            var extractToFileSystem = attribute is EmbeddedResourceExtractAttribute;
-
-                            // check this doesn't conflict with any already added
-                            var conflict = embeddedResourceItems
-                                            .SingleOrDefault(x => x.ExtractToFileSystem == extractToFileSystem && x.ResourceUrl == url);
-
-                            if (conflict != null) 
-                            {
-                                LogHelper.Warn(typeof(EmbeddedResourceService),
-                                    $"Conflict with existing registration: (Resource: '{conflict.ResourceNamespace}', Url: '{conflict.ResourceUrl}') " +
-                                    $"When trying to register (Resource: '{attribute.ResourceNamespace}', Url: '{url}') ");
-                            }
-                            else // no conflict
-                            {
-                                // single creation point of item models
-                                embeddedResourceItems.Add(
-                                    new EmbeddedResourceItem(
-                                        assembly.FullName,
-                                        attribute.ResourceNamespace,
-                                        url,
-                                        backOfficeUserOnly,
-                                        extractToFileSystem));
-                            }
+                            LogHelper.Warn(typeof(EmbeddedResourceService),
+                                $"Conflict with existing registration: (Resource: '{conflict.ResourceNamespace}', Url: '{conflict.ResourceUrl}') " +
+                                $"When trying to register (Resource: '{attribute.ResourceNamespace}', Url: '{url}') ");
+                        }
+                        else // no conflict
+                        {
+                            // single creation point of item models
+                            embeddedResourceItems.Add(
+                                new EmbeddedResourceItem(
+                                    assembly.FullName,
+                                    attribute.ResourceNamespace,
+                                    url,
+                                    backOfficeUserOnly,
+                                    extractToFileSystem));
                         }
                     }
                 }
             }
 
             return embeddedResourceItems.ToArray();
+        }
+
+        /// <summary>
+        /// Returns all the attributes it can find (conflicts are not removed)
+        /// Pulled out of GetAllEmbeddedResourceItems to simplify it & create a new seam
+        /// </summary>
+        /// <returns></returns>
+        internal IEmbeddedResourceAttribute[] GetCustomAttributes()
+        {
+            return EmbeddedResourceService
+                    .GetAssemblies()
+                    .SelectMany(x => 
+                        ((IEmbeddedResourceAttribute[])x.GetCustomAttributes<EmbeddedResourceAttribute>())
+                           .Concat((IEmbeddedResourceAttribute[])x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>())
+                           .Concat((IEmbeddedResourceAttribute[])x.GetCustomAttributes<EmbeddedResourceExtractAttribute>()))
+                    .ToArray();
         }
 
         /// <summary>
@@ -270,8 +279,6 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <returns></returns>
         private static string EnsureUrlAppRelative(string url)
         {            
-
-
             if (HttpContext.Current != null) // if outside of the unit test context
             {
                 if (!VirtualPathUtility.IsAppRelative(url))
