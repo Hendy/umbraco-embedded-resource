@@ -1,9 +1,11 @@
-﻿namespace Our.Umbraco.EmbeddedResource.Models
+﻿using Our.Umbraco.EmbeddedResource.Interfaces;
+
+namespace Our.Umbraco.EmbeddedResource.Models
 {
     /// <summary>
-    /// lightweight POCO to represent a single emebedded resource item
+    /// lightweight POCO to represent a single emebedded resource
     /// </summary>
-    public class EmbeddedResourceItem
+    public class EmbeddedResourceItem // : IEmbeddedResource
     {
         internal string AssemblyFullName { get; private set; }
 
@@ -14,6 +16,12 @@
         internal bool BackOfficeUserOnly { get; private set; }
 
         internal bool ExtractToFileSystem { get; private set; }
+
+        //string IEmbeddedResource.AssemblyFullName => throw new System.NotImplementedException();
+
+        //string IEmbeddedResource.ResourceNamespace => throw new System.NotImplementedException();
+
+        //string IEmbeddedResource.ResourceUrl => throw new System.NotImplementedException();
 
         /// <summary>
         /// internal constructor to ensure all mandatory values supplied

@@ -1,9 +1,9 @@
 ﻿namespace Our.Umbraco.EmbeddedResource.Interfaces
 {
     /// <summary>
-    /// The min set of data required to identify a resource
+    /// The min set of data required to identify an embedded resource
     /// </summary>
-    internal interface IEmbeddedResourceAttribute
+    internal interface IEmbeddedResource
     {
         /// <summary>
         /// The full name of the assembly in which the resource is in

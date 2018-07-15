@@ -126,14 +126,14 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// Pulled out of GetAllEmbeddedResourceItems to simplify it & create a new seam
         /// </summary>
         /// <returns></returns>
-        internal IEmbeddedResourceAttribute[] GetCustomAttributes()
+        private IEmbeddedResource[] GetCustomAttributes()
         {
             return EmbeddedResourceService
                     .GetAssemblies()
                     .SelectMany(x => 
-                        ((IEmbeddedResourceAttribute[])x.GetCustomAttributes<EmbeddedResourceAttribute>())
-                           .Concat((IEmbeddedResourceAttribute[])x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>())
-                           .Concat((IEmbeddedResourceAttribute[])x.GetCustomAttributes<EmbeddedResourceExtractAttribute>()))
+                        ((IEmbeddedResource[])x.GetCustomAttributes<EmbeddedResourceAttribute>())
+                           .Concat((IEmbeddedResource[])x.GetCustomAttributes<EmbeddedResourceProtectedAttribute>())
+                           .Concat((IEmbeddedResource[])x.GetCustomAttributes<EmbeddedResourceExtractAttribute>()))
                     .ToArray();
         }
 
