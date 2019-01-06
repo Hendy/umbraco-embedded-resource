@@ -30,13 +30,13 @@ namespace Our.Umbraco.EmbeddedResource.Services
         }
 
         /// <summary>
-        /// Look for all attributes and build the data-set
+        /// Main entry point to process all resources - either extracting them to the file-system, or by setting up routing and client-dependency
         /// </summary>
         /// <param name="httpContext"></param>
         internal void RegisterResources()
         {
-            //locking required here
-
+            // cache locking required here (Our.Umbraco.Caching)
+            
             foreach (var embeddedResourceItem in this.GetAllEmbeddedResourceItems())
             {
                 if (embeddedResourceItem.ExtractToFileSystem)
@@ -66,6 +66,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
 
         /// <summary>
         /// Builds an array of POCOs to represent the all consumer attributes found (excludes any conflicts - two different resources to the same file or url)
+        /// (internal not private for unit testing)
         /// </summary>
         /// <returns>POCO array of all registered emebedded resources</returns>
         internal virtual EmbeddedResourceItem[] GetAllEmbeddedResourceItems() // TODO: pull out the attrubute parsing logic
@@ -178,7 +179,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
         }
 
         /// <summary>
-        /// 
+        /// (internal not private for unit testing)
         /// </summary>
         /// <param name="embeddedResourceItem">the details of the resource to extract</param>
         internal void ExtractToFileSystem(EmbeddedResourceItem embeddedResourceItem)
@@ -242,6 +243,7 @@ namespace Our.Umbraco.EmbeddedResource.Services
         /// <summary>
         /// returns true if the current request is logged in as a back office user
         /// https://our.umbraco.com/forum/umbraco-7/using-umbraco-7/72798-how-to-check-if-an-umbraco-user-is-logged-in-on-a-frontend-request
+        /// (internal not private for unit testing)
         /// </summary>
         /// <returns></returns>
         internal virtual bool IsBackOfficeUser()
