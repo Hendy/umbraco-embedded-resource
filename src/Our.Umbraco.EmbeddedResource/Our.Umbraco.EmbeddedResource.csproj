@@ -181,6 +181,7 @@
     <Compile Include="Controllers\EmbeddedResourceController.cs" />
     <Compile Include="Models\EmbeddedResourceItem.cs" />
     <Compile Include="EmbeddedResourceProtectedAttribute.cs" />
+    <Compile Include="Registration.cs" />
     <Compile Include="Services\EmbeddedResourceService.cs" />
     <Compile Include="Events\EmbeddedResourceStartup.cs" />
     <Compile Include="ClientDependency\EmbeddedResourceVirtualFile.cs" />
