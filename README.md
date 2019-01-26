@@ -30,7 +30,7 @@ Both attributes have the same two required parameters:
     @using Our.Umbraco.EmbeddedResource
 
     // register an embedded jpg as if it were on the file system    
-    [assembly: EmbeddedResource("MyPackage.Example.jpg", "/AppPlugins/MyPackage/Example.jpg")]
+    [assembly: EmbeddedResource("MyPackage.Example.jpg", "/App_Plugins/MyPackage/Example.jpg")]
     
     // register an embedded png, served only to back office users    
-    [assembly: EmbeddedResourceProtected("MyPackage.Example.png", "/AppPlugins/MyPackage/Example.png")]
+    [assembly: EmbeddedResourceProtected("MyPackage.Example.png", "/App_Plugins/MyPackage/Example.png")]
